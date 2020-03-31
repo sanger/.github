@@ -16,7 +16,7 @@ If applicable
 **To Reproduce**
 Steps to reproduce the behaviour:
 1. Go to page '...'
-2. Click on button '....'
+2. Click on button '...'
 3. See error
 
 **Expected behaviour**
@@ -26,9 +26,9 @@ What was expected to happen.
 If applicable, add screenshots to help explain your problem.
 
 **Desktop (please complete the following information):**
- - Windows or Mac?
- - Browser Chrome, Firefox, Safari or other?
- - Browser version (use 'About' to look up)?
+* Windows or Mac?
+* Browser Chrome, Firefox, Safari or other?
+* Browser version (use 'About' to look up)?
 
 **Additional context**
 Add any other context about the problem here.

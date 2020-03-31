@@ -1,7 +1,7 @@
 ---
 name: Research task
 about: Create a research Issue
-title: ''
+title: GPL-nnn edit title here
 labels: research
 assignees: ''
 
