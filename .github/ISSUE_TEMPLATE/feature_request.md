@@ -15,8 +15,8 @@ e.g. John Smith
 
 **Acceptance criteria**
 To be considered successful the solution must allow:
-1. add a list of acceptance criteria here
-2. ...
+- [ ] add a list of acceptance criteria here
+- [ ] ...
 
 **Additional context**
 Add any other context or screenshots about the feature request here.
