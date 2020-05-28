@@ -19,7 +19,7 @@ To be considered successful the solution must allow:
 - [ ] ...
 
 **Dependencies**
-This story is blocked by the follwing dependencies:
+This story is blocked by the following dependencies:
 - #<issue_no.>
 - sanger/<repo>#<issue_no.>
 
