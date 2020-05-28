@@ -11,7 +11,7 @@ assignees: ''
 The clear and concise user story describing what is required. e.g. As an SSR user I would like sample manifests to allow me to upload x ...
 
 **Who are the primary contacts for this story**
-e.g. John (don't include surnames in public repos)
+e.g. John S (don't include surnames in public repos)
 
 **Acceptance criteria**
 To be considered successful the solution must allow:
