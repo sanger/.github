@@ -101,7 +101,7 @@ _E.g._ Python
 
 _E.g._ Ruby (Rails)
 
-    bundle exec spec
+    bundle exec rspec
 
 ## Deployment [Mandatory]
 
