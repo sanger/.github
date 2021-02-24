@@ -1,0 +1,11 @@
+{
+  "name": "Update rubocop",
+  "description": "Add a cron job to automatically update rubocop",
+  "iconName": "calendar-svgrepo-com",
+  "categories": [
+    "Ruby"
+  ],
+  "filePatterns": [
+    "rubocop.yml$"
+  ]
+}
