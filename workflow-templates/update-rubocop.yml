@@ -6,6 +6,7 @@ name: Update Rubocop
 # * All Rubocop associated gems are in the 'lint' group in the Gemfile
 # * You update the 'BUNDLE_WITHOUT' section to exclude other groups, especially
 #   those which will block `bundle install`
+# * Your .gitignore file contains `/vendor`
 #
 # Once added this will add an actions which:
 # * Automatically runs at 10 am Sunday
