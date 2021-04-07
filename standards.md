@@ -5,7 +5,7 @@
 <!-- toc -->
 
 - [Releases](#releases)
-- [IDE extentions](#ide-extentions)
+- [IDE extensions](#ide-extensions)
   * [Visual Studio Code](#visual-studio-code)
   * [Miscellaneous](#miscellaneous)
     + [EditorConfig](#editorconfig)
@@ -30,7 +30,13 @@ Prepend the release with the "release-" or "v":
 * `release-1.2.3`
 * `v1.2.3`
 
-## IDE extentions
+## Security
+
+### Client-side
+
+We use Talisman via [Global Git Hooks](https://github.com/sanger/global-git-hooks) to try to prevent sensitive information being committed to our repositories. Follow the setup steps in the Readme to get it working on your machine.
+
+## IDE extensions
 
 It is useful (but not required) when the same linting and/or formatting extensions are used between developers, here
 are some examples:
