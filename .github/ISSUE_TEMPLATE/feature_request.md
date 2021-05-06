@@ -23,5 +23,10 @@ This story is blocked by the following dependencies:
 - #<issue_no.>
 - sanger/<repo>#<issue_no.>
 
+References
+This story has a non-blocking relationship with:
+- #<issue_no.>
+- sanger/<repo>#<issue_no.>
+
 **Additional context**
 Add any other context or screenshots about the feature request here.
