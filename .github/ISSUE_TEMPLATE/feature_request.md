@@ -1,7 +1,7 @@
 ---
 name: Feature request
 about: Create a feature Issue
-title: GPL-nnn edit title here
+title: DPL-nnn edit title here
 labels: enhancement
 assignees: ''
 
