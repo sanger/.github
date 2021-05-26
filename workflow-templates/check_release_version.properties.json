@@ -1,0 +1,8 @@
+{
+  "name": "Check release version",
+  "description": "Check that the release version has been incremented",
+  "iconName": "package-svgrepo-com",
+  "filePatterns": [
+    "^\\.release-version$"
+  ]
+}

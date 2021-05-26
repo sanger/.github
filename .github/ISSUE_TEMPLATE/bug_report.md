@@ -1,7 +1,7 @@
 ---
 name: Bug report
 about: Create a bug Issue
-title: BUG - edit title here
+title: DPL-nnn [BUG] edit title here
 labels: bug
 assignees: ''
 
