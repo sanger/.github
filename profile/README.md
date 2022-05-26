@@ -10,3 +10,15 @@
 🍿 Fun facts - what does your team eat for breakfast?
 🧙 Remember, you can do mighty things with the power of [Markdown](https://docs.github.com/github/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax)
 -->
+
+Definition of Ready
+
+A specific user who owns the story
+A sensible summary - Why are we doing it? What is the value?
+Size estimate (S, M, L)
+How will you do it?
+Nice clear acceptance criteria
+A story number - GitHub?
+Create a template for users
+
+Ensure that all information has been captured is in the story.
