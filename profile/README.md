@@ -11,14 +11,16 @@
 🧙 Remember, you can do mighty things with the power of [Markdown](https://docs.github.com/github/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax)
 -->
 
-Definition of Ready
+## Definition of Ready
 
-A specific user who owns the story
-A sensible summary - Why are we doing it? What is the value?
-Size estimate (S, M, L)
-How will you do it?
-Nice clear acceptance criteria
-A story number - GitHub?
-Create a template for users
+- A specific user who owns the story
+- A sensible summary - Why are we doing it? What is the value?
+- Size estimate (S, M, L)
+- How will you do it?
+- Nice clear acceptance criteria
+- A story number
+- Ensure that all of the information related to the story is captured
 
-Ensure that all information has been captured is in the story.
+### TODO - how can we improve the definition of Ready?
+- Use GitHub actions to generate story numbers
+- Create a story template for users
