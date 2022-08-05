@@ -8,9 +8,12 @@ assignees: ''
 ---
 
 **User story**
-The clear and concise user story describing what is required. e.g. As an SSR user I would like sample manifests to allow me to upload x ...
+The clear and concise user story describing what is required. e.g. As an SSR (John D.) I would like sample manifests to allow me to upload "x" so that I can ...
 
 **Who are the primary contacts for this story**
+e.g. John S (don't include surnames in public repos)
+
+**Who is the nominated tester for UAT**
 e.g. John S (don't include surnames in public repos)
 
 **Acceptance criteria**
