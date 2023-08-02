@@ -11,6 +11,7 @@
     + [EditorConfig](#editorconfig)
       - [Python](#python)
       - [Ruby](#ruby)
+- [Dependency guidelines](#dependency-guidelines)
 
 <!-- tocstop -->
 
@@ -87,3 +88,13 @@ charset = utf-8
 trim_trailing_whitespace = true
 insert_final_newline = true
 ```
+
+## Dependency guidelines
+
+To ensure our repositories are using up-to-date libraries and that any security vulnerabilities are patched quickly, we use Depfu and Dependabot to manage our code dependencies. These systems automatically open pull requests to bump dependency versions which contain information about the changes as well as running against the CI. In order to ensure we make the most out of this process there are guidelines we follow:
+
+1. Auto merge security requests and patch updates (in semver major.minor.**patch**) if they are passing CI builds.
+2. Review minor / major updates (in semver **major**.**minor**.patch) for breaking changes, deprecation warnings, and new features. Pull down the changes and manually check for issues locally, even if passing CI.
+3. Wait 1-2 weeks before merging in a new non-security related dependency update. This prevents having to re-merge a dependency multiple times for any hotfixes or additional patches they put out in that time.
+4. Split out major breaking changes if they require their own story. This may include major framework updates like Rails, Vue, Flask.
+5. Deploy dependencies all the way to production. Check for existing work in progress to ensure you don’t disrupt or break in-progress work. This is to ensure that apps are regularly updated with security updates and the deployment pipelines are still functioning.
