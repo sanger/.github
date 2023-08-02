@@ -12,9 +12,9 @@ When a release is created, the tag which corresponds to the release is named v f
 
 ## How the automated releases change will affect pull requests:
 
-The only extra work required is on each pull request pointing into develop<sup>1</sup>* you will need to bump the value in the .release-version file. For example if you have a minor change going into develop you will be required to increment .release-version in your pull request from vX.0.3 to vX.1.0.
+The only extra work required is on each pull request pointing into master you will need to bump the value in the .release-version file. For example if you have a minor change going into master you will be required to increment .release-version in your pull request from vX.0.3 to vX.1.0.
 
-There is a github action check to make sure you are doing this called ‘check release version bump’. This check will fail if the value in the pull requests’ .release-version file has the same value as the latest release of the repo.<sup>2</sup>*
+There is a github action check to make sure you are doing this called ‘check release version bump’. This check will fail if the value in the pull requests’ .release-version file has the same value as the latest release of the repo.<sup>1</sup>*
 
 ## Why do we need automated releases:
 
@@ -24,15 +24,6 @@ Automated releases are a stepping stone for the move over to automated deploymen
 
 Hotfixes into master are still possible except you will need to bump the value in the .release-version file.
 
-## Depfu’s
-
-Currently you will have to bump the value in the .release-version file and push to the depfu branch before merging it. Bump all depfus/dependabots as a minor release.
-
-## Which repositories have automated releases
-
-Automated releases v1 <sup>1</sup>*: traction-ui, traction-service, labwhere
-
-Automated-releases v2: Lighthouse, Lighthouse-ui, crawler, wrangler, baracoda
 
 ## Branch deployments - before merging
 
@@ -43,12 +34,9 @@ For repos using Docker images as the unit of deployment, there is an “on dispa
 *   Move common actions to the organization’s templates in the “github” repo
 *   On dispatch releases for asset creation
 *   Improve version comparison check
-*   Add depfu/dependatbot automated release version update - compares with develop and increments the version number with a minor
 *   Automated deployment - on merge into develop or master, it deploys to the related environment
 *   Check if actions in a PR are re-run when other PRs are merged into the target
 
 ### Automated releases notes
 
-1* For traction-ui, traction-service and labwhere you will need to bump the .release-version file on pull request into master instead of develop.The develop releases are still auto generated but with a tag like: develop/&lt;date>/&lt;time>
-
-2* Check release bump is quite crude and only compares the value in your .release-version file to the repo’s latest release tag name. Rely on this check lightly as there are some edge cases in which this will false pass. For example if you create a pull request and have bumped the .release-version file correctly and another pull request is merged in before yours, you will then need to bump your .release-version again to account for this. The test may still say it has passed if it hasn't been re-run. 
+1* Check release bump is quite crude and only compares the value in your .release-version file to the repo’s latest release tag name. Rely on this check lightly as there are some edge cases in which this will false pass. For example if you create a pull request and have bumped the .release-version file correctly and another pull request is merged in before yours, you will then need to bump your .release-version again to account for this. The test may still say it has passed if it hasn't been re-run. 
