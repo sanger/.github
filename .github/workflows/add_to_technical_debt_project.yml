@@ -1,3 +1,9 @@
+# Reusable workflow to be called from other repos.
+# Uses the third party 'add-to-project' action to add 'depfu' PRs
+# to the Technical Debt project board.
+# Requires a GitHub Personal Access Token to be passed in as a secret named 'token'.
+# See LabWhere .github/workflows for an example of how to use this workflow.
+
 name: Add dependencies to technical debt project
 
 on:
