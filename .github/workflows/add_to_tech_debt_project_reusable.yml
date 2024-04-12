@@ -22,5 +22,5 @@ jobs:
       - uses: actions/add-to-project@v0.5.0
         with:
           project-url: https://github.com/orgs/sanger/projects/12
-          github-token: ${{ secrets.ADD_TO_PROJECT_PAT_ORG_WIDE }}
+          github-token: ${{ secrets.token }}
           labeled: depfu
