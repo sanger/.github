@@ -2,6 +2,8 @@
 # Uses the third party 'add-to-project' action to add 'depfu' PRs
 # to the Technical Debt project board.
 # Requires a GitHub Personal Access Token to be passed in as a secret named 'token'.
+# Calling workflows should be triggered on pull_request events with a label.
+# This specific pull request is then the one added to the project - it doesn't scan all open PRs.
 # See LabWhere .github/workflows for an example of how to use this workflow.
 
 name: Add dependencies to technical debt project
