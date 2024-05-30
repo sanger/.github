@@ -32,6 +32,5 @@ jobs:
         with:
           GITHUB_TOKEN: ${{ steps.get_workflow_token.outputs.token }}
           ISSUE_PREFIX: ${{ env.ISSUE_PREFIX }}
-          ISSUE_COUNTER: ${{ vars.ISSUE_NUMBER }}
           ISSUE_COUNTER_VAR: "ISSUE_NUMBER"
           ORG_NAME: "sanger"
