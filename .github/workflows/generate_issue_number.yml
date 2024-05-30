@@ -17,16 +17,17 @@ jobs:
       - name: Checkout this repository
         uses: actions/checkout@v2
 
-      - name: Set issue prefix
+      - name: Set issue prefix # Current year // Y24, Y25 etc
         run: echo "ISSUE_PREFIX=Y$(date +'%y')" >> $GITHUB_ENV
 
       - name: Get Token
-        id: get_workflow_token
+        id: get_workflow_token # Generates a token for the action
         uses: peter-murray/workflow-application-token-action@v3
         with:
           application_id: ${{ secrets.app_id }}
           application_private_key: ${{ secrets.app_key }}
 
+      # Updates org variable for the counter & updates the issue title
       - name: Assign custom issue number
         uses: SHIV5T3R/Issuer@main
         with:
