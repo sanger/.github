@@ -1,7 +1,7 @@
 ---
 name: Housekeeping
 about: Record general maintenance tasks
-title: Y24-nnn edit title here
+title: edit title here
 labels: housekeeping
 assignees: ''
 
