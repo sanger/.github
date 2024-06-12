@@ -1,7 +1,7 @@
 ---
 name: Research task
 about: Create a research Issue
-title: Y24-nnn edit title here
+title: edit title here
 labels: research
 assignees: ''
 
