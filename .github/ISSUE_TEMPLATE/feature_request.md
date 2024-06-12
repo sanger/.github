@@ -1,7 +1,7 @@
 ---
 name: Feature request
 about: Create a feature Issue
-title: Y24-nnn edit title here
+title: edit title here
 labels: enhancement
 assignees: ''
 
