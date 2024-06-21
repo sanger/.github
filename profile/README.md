@@ -21,6 +21,4 @@
 - A story number
 - Ensure that all of the information related to the story is captured
 
-### TODO - how can we improve the definition of Ready?
-- Use GitHub actions to generate story numbers
-- Create a story template for users
+
