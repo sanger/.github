@@ -31,15 +31,15 @@ jobs:
         id: check_issue_title
         run: |
           ISSUE_TITLE="${{ github.event.issue.title }}"
-          if [[ "$ISSUE_TITLE" =~ ^Y[0-9]{2,2}-[0-9]{3,4} ]]; then
-            echo "NEEDS_PREFIX=false" >> $GITHUB_ENV
+          if [[ "$ISSUE_TITLE" =~ ^Y[0-9]{2}-[0-9]{3,4} ]]; then
+            echo "VALID_TITLE=true" >> $GITHUB_OUTPUT
           else
-            echo "NEEDS_PREFIX=true" >> $GITHUB_ENV
+            echo "VALID_TITLE=false" >> $GITHUB_OUTPUT
           fi
 
       # Updates org variable for the counter & updates the issue title
       - name: Assign custom issue number
-        if: env.NEEDS_PREFIX == 'true'
+        if: steps.check_issue_title.outputs.VALID_TITLE == 'false'
         uses: sanger/psd_story_number_generator@main
         with:
           GITHUB_TOKEN: ${{ steps.get_workflow_token.outputs.token }}
