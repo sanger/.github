@@ -30,4 +30,4 @@ jobs:
         with:
           project-url: https://github.com/orgs/sanger/projects/12
           github-token: ${{ steps.get_workflow_token.outputs.token }}
-          labeled: depfu
+          labeled: depfu, dependencies
