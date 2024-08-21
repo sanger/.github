@@ -30,7 +30,7 @@ jobs:
       - name: Check issue title
         id: check_issue_title
         run: |
-          ISSUE_TITLE="${{ github.event.issue.title }}"
+          ISSUE_TITLE=$(printf '%q' "${{ github.event.issue.title }}")
           if [[ "$ISSUE_TITLE" =~ ^Y[0-9]{2}-[0-9]{3,4} ]]; then
             echo "VALID_TITLE=true" >> $GITHUB_OUTPUT
           else
