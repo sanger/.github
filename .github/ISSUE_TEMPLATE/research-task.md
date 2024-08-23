@@ -10,6 +10,10 @@ assignees: ''
 **Description**
 A brief description of the research to be carried out.
 
+**Acceptance Criteria**
+The following outputs from the research are produced:
+- [ ] ...
+
 **Who the primary contacts are for this work**
 e.g. John Smith
 
