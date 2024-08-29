@@ -27,20 +27,9 @@ jobs:
           application_id: ${{ secrets.app_id }}
           application_private_key: ${{ secrets.app_key }}
 
-      - name: Check issue title
-        id: check_issue_title
-        run: |
-          ISSUE_TITLE=$(printf '%q' "${{ github.event.issue.title }}")
-          if [[ "$ISSUE_TITLE" =~ ^Y[0-9]{2}-[0-9]{3,4} ]]; then
-            echo "VALID_TITLE=true" >> $GITHUB_OUTPUT
-          else
-            echo "VALID_TITLE=false" >> $GITHUB_OUTPUT
-          fi
-
       # Updates org variable for the counter & updates the issue title
       - name: Assign custom issue number
-        if: steps.check_issue_title.outputs.VALID_TITLE == 'false'
-        uses: sanger/psd_story_number_generator@main
+        uses: sanger/psd_story_number_generator@develop
         with:
           GITHUB_TOKEN: ${{ steps.get_workflow_token.outputs.token }}
           ISSUE_PREFIX: ${{ env.ISSUE_PREFIX }}
