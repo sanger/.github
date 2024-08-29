@@ -29,7 +29,7 @@ jobs:
 
       # Updates org variable for the counter & updates the issue title
       - name: Assign custom issue number
-        uses: sanger/psd_story_number_generator@develop
+        uses: sanger/psd_story_number_generator@main
         with:
           GITHUB_TOKEN: ${{ steps.get_workflow_token.outputs.token }}
           ISSUE_PREFIX: ${{ env.ISSUE_PREFIX }}
