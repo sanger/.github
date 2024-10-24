@@ -18,6 +18,7 @@ e.g. John S (don't include surnames in public repos)
 **Who is the nominated tester for UAT**
 
 Consider does this need _User_ testing or can it be done within the team. For guidance see Confluence page "Process for deciding on what user stories need UAT (User Acceptance Testing)".
+
 e.g. John S (don't include surnames in public repos)
 
 **Acceptance criteria**
