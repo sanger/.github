@@ -21,6 +21,7 @@ jobs:
           else
             echo "MAIN_BRANCH_NAME=master" >> $GITHUB_ENV
           fi
+          echo "MAIN_BRANCH_NAME=$MAIN_BRANCH_NAME" # Output for debugging
 
       - name: Extract PR numbers and titles
         env:
