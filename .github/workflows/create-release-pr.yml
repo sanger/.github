@@ -52,7 +52,7 @@ jobs:
           MAIN_BRANCH_NAME: ${{ env.MAIN_BRANCH_NAME }}
           GH_TOKEN: ${{ github.token }} # required for gh cli
         run: |
-          PR_TITLE="[automated] Merge Develop into $MAIN_BRANCH_NAME"
+          PR_TITLE="[automated] Merge Develop into ${MAIN_BRANCH_NAME^}"
           PR_BODY="#### Changes proposed in this pull request
 
           $(echo "$STORIES")
@@ -73,5 +73,5 @@ jobs:
           if [ -z "$EXISTING_PR" ]; then
             gh pr create --base "$MAIN_BRANCH_NAME" --head test-develop --title "$PR_TITLE" --body "$PR_BODY" --draft
           else
-            gh pr edit "$EXISTING_PR" --body "$PR_BODY"
+            gh pr edit "$EXISTING_PR" --title "$PR_TITLE" --body "$PR_BODY"
           fi
