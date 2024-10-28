@@ -4,7 +4,8 @@ name: Release
 on:
   push:
     branches:
-      - develop
+      - test-develop
+      - sh51/create-release-pr
 jobs:
   pull_request:
     name: Create or update PR
@@ -25,8 +26,8 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }} # required for gh cli
         run: |
-          # Extract numbers from PRs that have been merged into develop
-          PR_NUMBERS=$(gh api repos/:owner/:repo/compare/$MAIN_BRANCH_NAME...develop --jq '
+          # Extract numbers from PRs that have been merged into test-develop
+          PR_NUMBERS=$(gh api repos/:owner/:repo/compare/$MAIN_BRANCH_NAME...test-develop --jq '
           .commits[]
           | select(.commit.message
           | startswith("Merge pull request"))
@@ -67,10 +68,10 @@ jobs:
           This PR was auto-generated on $(TZ=Europe/London date --iso-8601=seconds)"
 
           # Check if a PR already exists
-          EXISTING_PR=$(gh pr list --base "$MAIN_BRANCH_NAME" --head develop --json number --jq '.[0].number')
+          EXISTING_PR=$(gh pr list --base "$MAIN_BRANCH_NAME" --head test-develop --json number --jq '.[0].number')
 
           if [ -z "$EXISTING_PR" ]; then
-            gh pr create --base "$MAIN_BRANCH_NAME" --head develop --title "$PR_TITLE" --body "$PR_BODY" --draft
+            gh pr create --base "$MAIN_BRANCH_NAME" --head test-develop --title "$PR_TITLE" --body "$PR_BODY" --draft
           else
             gh pr edit "$EXISTING_PR" --body "$PR_BODY"
           fi
