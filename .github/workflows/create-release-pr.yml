@@ -61,7 +61,7 @@ jobs:
           echo STORIES
           echo $STORIES
 
-          echo "STORIES=$STORIES" >> $GITHUB_ENV
+          echo "STORIES=\"$STORIES\"" >> $GITHUB_ENV
 
       - name: Perform PR creation or update
         env:
