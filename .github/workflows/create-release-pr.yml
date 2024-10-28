@@ -61,10 +61,13 @@ jobs:
           echo STORIES
           echo $STORIES
 
+          echo "STORIES=$STORIES" >> $GITHUB_ENV
+
       - name: Perform PR creation or update
         env:
-          MAIN_BRANCH_NAME: ${{ env.MAIN_BRANCH_NAME }}
           GH_TOKEN: ${{ github.token }} # required for gh cli
+          MAIN_BRANCH_NAME: ${{ env.MAIN_BRANCH_NAME }}
+          STORIES: ${{ env.STORIES }}
         run: |
           PR_TITLE="[automated] Merge Develop into ${MAIN_BRANCH_NAME^}"
           PR_BODY="#### Changes proposed in this pull request
