@@ -38,16 +38,25 @@ jobs:
           | .pr_number'
           )
 
+          echo $PR_NUMBERS
+
           # Fetch titles for each PR number
           PR_NUMBERS_AND_TITLES=$(for PR_NUMBER in $PR_NUMBERS; do
+            echo "* $PR_NUMBER"
             gh pr view $PR_NUMBER --json number,title --jq '{number: .number, title: .title}'
           done | jq -s 'sort_by(.title)')
+
+          echo $PR_NUMBERS_AND_TITLES
 
           # Sort extracted PR numbers by title
           SORTED_PR_NUMBERS=$(jq -r '.[].number' <<< "$PR_NUMBERS_AND_TITLES")
 
+          echo $SORTED_PR_NUMBERS
+
           STORIES=$(xargs -I {} gh pr view {} --json body --jq '.body | if . | test("Closes #\\d+") then capture("Closes #(?<issue_number>\\d+)") | "- #{}
             - Closes #" + .issue_number else "- #{}" end' <<< "$SORTED_PR_NUMBERS") # Note the line-break on this line is for formatting
+
+          echo $STORIES
 
       - name: Perform PR creation or update
         env:
