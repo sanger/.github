@@ -46,7 +46,7 @@ jobs:
           # Sort extracted PR numbers by title
           SORTED_PR_NUMBERS=$(jq -r '.[].number' <<< "$PR_NUMBERS_AND_TITLES")
 
-          STORIES=$(xargs -I {} gh pr view {} --json body --jq '.body | if . | test("Closes #\\d+") then capture("Closes #(?<issue_number>\\d+)") | "- #{}
+          STORIES=$(xargs -I {} gh pr view {} --json body --jq '.body | if . | test("(?i)Closes #\\d+") then capture("(?i)Closes #(?<issue_number>\\d+)") | "- #{}
             - Closes #" + .issue_number else "- #{}" end' <<< "$SORTED_PR_NUMBERS") # Note the line-break on this line is for formatting
 
           # Format and write STORIES as a multiline string
