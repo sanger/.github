@@ -17,10 +17,10 @@ jobs:
       - name: Determine main branch name
         run: |
           if git show-ref --verify --quiet refs/heads/main; then
-            echo "MAIN_BRANCH_NAME=main" >> $GITHUB_ENV
+            echo "MAIN_BRANCH_NAME=main" >> "$GITHUB_ENV"
             echo "Using 'main' as the main branch"
           else
-            echo "MAIN_BRANCH_NAME=master" >> $GITHUB_ENV
+            echo "MAIN_BRANCH_NAME=master" >> "$GITHUB_ENV"
             echo "Using 'master' as the main branch"
           fi
 
@@ -61,7 +61,12 @@ jobs:
           echo STORIES
           echo $STORIES
 
-          echo "STORIES=\"$STORIES\"" >> $GITHUB_ENV
+          # echo "STORIES=\"$STORIES\"" >> "$GITHUB_ENV"
+
+          # Format and write STORIES as a multiline string
+          echo "STORIES<<EOF" >> $GITHUB_ENV
+          echo "$STORIES" >> $GITHUB_ENV
+          echo "EOF" >> $GITHUB_ENV
 
       - name: Perform PR creation or update
         env:
