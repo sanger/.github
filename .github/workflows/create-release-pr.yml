@@ -61,8 +61,6 @@ jobs:
           echo STORIES
           echo $STORIES
 
-          # echo "STORIES=\"$STORIES\"" >> "$GITHUB_ENV"
-
           # Format and write STORIES as a multiline string
           echo "STORIES<<EOF" >> $GITHUB_ENV
           echo "$STORIES" >> $GITHUB_ENV
