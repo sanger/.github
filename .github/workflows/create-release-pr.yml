@@ -110,7 +110,9 @@ jobs:
 
             # combine with new description with the existing context
             PR_BODY="$NEW_DESCRIPTION
+
             -----
+
             $EXISTING_CONTEXT"
 
             # update the PR with the new body
