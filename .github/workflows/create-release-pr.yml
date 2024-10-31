@@ -1,0 +1,116 @@
+# Create or update merge-to-main pull requests for production releases
+# Note that by design, creating or editing a PR will not trigger a downstream `pull_request` event as this could lead to recursion
+name: Release
+on:
+  workflow_call:
+jobs:
+  pull_request:
+    name: Create or update PR
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Determine main branch name
+        run: |
+          if git show-ref --verify --quiet refs/heads/main; then
+            echo "MAIN_BRANCH_NAME=main" >> "$GITHUB_ENV"
+            echo "Using 'main' as the main branch"
+          else
+            echo "MAIN_BRANCH_NAME=master" >> "$GITHUB_ENV"
+            echo "Using 'master' as the main branch"
+          fi
+
+      - name: Extract PR numbers and titles
+        env:
+          GH_TOKEN: ${{ github.token }} # required for gh cli
+          MAIN_BRANCH_NAME: ${{ env.MAIN_BRANCH_NAME }}
+        run: |
+          # Extract numbers from PRs that have been merged into test-develop
+          PR_NUMBERS=$(gh api repos/:owner/:repo/compare/$MAIN_BRANCH_NAME...test-develop --jq '
+          .commits[]
+          | select(.commit.message
+          | startswith("Merge pull request"))
+          | .commit.message
+          | capture("#(?<pr_number>\\d+)")
+          | .pr_number'
+          )
+
+          # Fetch titles for each PR number
+          PR_NUMBERS_AND_TITLES=$(for PR_NUMBER in $PR_NUMBERS; do
+            gh pr view $PR_NUMBER --json number,title --jq '{number: .number, title: .title}'
+          done | jq -s 'sort_by(.title)')
+
+          # Sort extracted PR numbers by title
+          SORTED_PR_NUMBERS=$(jq -r '.[].number' <<< "$PR_NUMBERS_AND_TITLES")
+
+          STORIES=$(xargs -I {} gh pr view {} --json body --jq '.body | if . | test("(?i)Closes #\\d+") then capture("(?i)Closes #(?<issue_number>\\d+)") | "- #{}
+            - Closes #" + .issue_number else "- #{}" end' <<< "$SORTED_PR_NUMBERS") # Note the line-break on this line is for formatting
+
+          # Format and output variable as a multiline string
+          echo "STORIES<<EOF" >> $GITHUB_ENV
+          echo "$STORIES" >> $GITHUB_ENV
+          echo "EOF" >> $GITHUB_ENV
+
+      - name: Compile PR description
+        env:
+          STORIES: ${{ env.STORIES }}
+        run: |
+          DESCRIPTION="#### Proposed Changes
+
+          $(echo "$STORIES")
+
+          #### Instructions for Reviewers
+
+          - _Check stories are ready for release._
+          - _Check for any database migrations._
+          - _Check for debug code._
+          - _Check version is appropriate._
+
+          Everything above the horizontal rule will be overwritten on the next push
+          This PR was auto-generated on $(TZ=Europe/London date --iso-8601=seconds)
+
+          -----
+
+          #### Additional Context
+
+          None
+          "
+          # Format and output variable as a multiline string
+          echo "DESCRIPTION<<EOF" >> $GITHUB_ENV
+          echo "$DESCRIPTION" >> $GITHUB_ENV
+          echo "EOF" >> $GITHUB_ENV
+
+      - name: Perform PR creation or update
+        env:
+          GH_TOKEN: ${{ github.token }} # required for gh cli
+          MAIN_BRANCH_NAME: ${{ env.MAIN_BRANCH_NAME }}
+          DESCRIPTION: ${{ env.DESCRIPTION }}
+        run: |
+          # Check if a PR already exists
+          EXISTING_PR=$(gh pr list --base "$MAIN_BRANCH_NAME" --head test-develop --json number --jq '.[0].number')
+
+          if [ -z "$EXISTING_PR" ]; then
+            # Create a new PR
+            PR_TITLE="[automated] Merge Develop into ${MAIN_BRANCH_NAME^}"
+            PR_BODY="$DESCRIPTION"
+            gh pr create --base "$MAIN_BRANCH_NAME" --head test-develop --title "$PR_TITLE" --body "$PR_BODY" --draft
+          else
+            # get the body of the existing PR
+            EXISTING_PR_BODY=$(gh pr view "$EXISTING_PR" --json body --jq '.body')
+
+            # extract everything above the horizontal rule on the new description
+            NEW_DESCRIPTION=$(awk '/-----/ {exit} {print}' <<< "$DESCRIPTION")
+
+            # extract everything below the horizontal rule on the existing description
+            EXISTING_CONTEXT=$(awk '/-----/ {flag=1; next} flag' <<< "$EXISTING_PR_BODY")
+
+            # combine with new description with the existing context
+            PR_BODY="$NEW_DESCRIPTION
+
+            -----
+            $EXISTING_CONTEXT"
+
+            # update the PR with the new body
+            gh pr edit "$EXISTING_PR" --body "$PR_BODY"
+          fi
