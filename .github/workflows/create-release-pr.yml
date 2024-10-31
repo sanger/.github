@@ -2,10 +2,7 @@
 # Note that by design, creating or editing a PR will not trigger a downstream `pull_request` event as this could lead to recursion
 name: Release
 on:
-  push:
-    branches:
-      - test-develop
-      - sh51/create-release-pr
+  workflow_call:
 jobs:
   pull_request:
     name: Create or update PR
