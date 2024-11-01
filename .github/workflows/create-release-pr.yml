@@ -26,8 +26,8 @@ jobs:
           GH_TOKEN: ${{ github.token }} # required for gh cli
           MAIN_BRANCH_NAME: ${{ env.MAIN_BRANCH_NAME }}
         run: |
-          # Extract numbers from PRs that have been merged into test-develop
-          PR_NUMBERS=$(gh api repos/:owner/:repo/compare/$MAIN_BRANCH_NAME...test-develop --jq '
+          # Extract numbers from PRs that have been merged into develop
+          PR_NUMBERS=$(gh api repos/:owner/:repo/compare/$MAIN_BRANCH_NAME...develop --jq '
           .commits[]
           | select(.commit.message
           | startswith("Merge pull request"))
@@ -88,13 +88,13 @@ jobs:
           DESCRIPTION: ${{ env.DESCRIPTION }}
         run: |
           # Check if a PR already exists
-          EXISTING_PR=$(gh pr list --base "$MAIN_BRANCH_NAME" --head test-develop --json number --jq '.[0].number')
+          EXISTING_PR=$(gh pr list --base "$MAIN_BRANCH_NAME" --head develop --json number --jq '.[0].number')
 
           if [ -z "$EXISTING_PR" ]; then
             # Create a new PR
             PR_TITLE="[automated] Merge Develop into ${MAIN_BRANCH_NAME^}"
             PR_BODY="$DESCRIPTION"
-            gh pr create --base "$MAIN_BRANCH_NAME" --head test-develop --title "$PR_TITLE" --body "$PR_BODY" --draft
+            gh pr create --base "$MAIN_BRANCH_NAME" --head develop --title "$PR_TITLE" --body "$PR_BODY" --draft
           else
             # get the body of the existing PR
             EXISTING_PR_BODY=$(gh pr view "$EXISTING_PR" --json body --jq '.body')
