@@ -92,7 +92,7 @@ jobs:
 
           if [ -z "$EXISTING_PR" ]; then
             # Create a new PR
-            PR_TITLE="[automated] Merge Develop into ${MAIN_BRANCH_NAME^}"
+            PR_TITLE="[release] Merge Develop into ${MAIN_BRANCH_NAME^}"
             PR_BODY="$DESCRIPTION"
             gh pr create --base "$MAIN_BRANCH_NAME" --head develop --title "$PR_TITLE" --body "$PR_BODY" --draft
           else
