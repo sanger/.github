@@ -55,8 +55,14 @@ jobs:
       - name: Compile PR title
         run: |
           # Get version from .release-version file
-          VERSION=$(cat .release-version)
-          TITLE="[release] Merge Develop into ${MAIN_BRANCH_NAME^} for ${VERSION}"
+
+          if [ ! -f .release-version ]; then
+            # read the version from the file
+            VERSION=$(cat .release-version)
+            TITLE="[release] Merge Develop into ${MAIN_BRANCH_NAME^} for ${VERSION}"
+          else
+            TITLE="[release] Merge Develop into ${MAIN_BRANCH_NAME^}"
+          fi
 
       - name: Compile PR description
         env:
