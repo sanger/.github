@@ -52,6 +52,12 @@ jobs:
           echo "$STORIES" >> $GITHUB_ENV
           echo "EOF" >> $GITHUB_ENV
 
+      - name: Compile PR title
+        run: |
+          # Get version from .release-version file
+          VERSION=$(cat .release-version)
+          TITLE="[release] Merge Develop into ${MAIN_BRANCH_NAME^} for ${VERSION}"
+
       - name: Compile PR description
         env:
           STORIES: ${{ env.STORIES }}
@@ -85,6 +91,7 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }} # required for gh cli
           MAIN_BRANCH_NAME: ${{ env.MAIN_BRANCH_NAME }}
+          TITLE: ${{ env.TITLE }}
           DESCRIPTION: ${{ env.DESCRIPTION }}
         run: |
           # Check if a PR already exists
@@ -92,7 +99,7 @@ jobs:
 
           if [ -z "$EXISTING_PR" ]; then
             # Create a new PR
-            PR_TITLE="[release] Merge Develop into ${MAIN_BRANCH_NAME^}"
+            PR_TITLE="$TITLE"
             PR_BODY="$DESCRIPTION"
             gh pr create --base "$MAIN_BRANCH_NAME" --head develop --title "$PR_TITLE" --body "$PR_BODY" --draft
           else
