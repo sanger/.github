@@ -124,6 +124,6 @@ jobs:
             -----
             $EXISTING_CONTEXT"
 
-            # update the PR with the new body
-            gh pr edit "$EXISTING_PR" --body "$PR_BODY"
+            # update the PR with the new title and body
+            gh pr edit "$EXISTING_PR" --title "$PR_TITLE" --body "$PR_BODY"
           fi
