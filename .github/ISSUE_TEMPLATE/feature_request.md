@@ -42,6 +42,7 @@ This story has a non-blocking relationship with:
 **Additional context**
 
 **Deployment notes**
+
 Add any details that should be noted when deploying this feature. For example, is a database migration needed, a specifc rake task or other script that needs to be run, a dependency on another application or service that needs to be released first etc?
 These notes are intended to ensure the developers releasing the feature know what needs to be done.
 
