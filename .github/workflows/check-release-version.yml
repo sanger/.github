@@ -17,8 +17,9 @@ on:
 jobs:
   check:
     runs-on: ubuntu-latest
-    # only run when PR is not draft
-    if: ${{ !github.event.pull_request.draft }}
+    # only run when PR is not draft and when .release-version exists in the repository
+    # This was added for this workflow to not to be executed when a PR is made to .github repository.
+    if: ${{ !github.event.pull_request.draft && github.repository != 'sanger/.github' }}
     steps:
     - uses: actions/checkout@v4
       with:
