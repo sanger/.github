@@ -6,8 +6,7 @@ on: workflow_call
 jobs:
   check:
     runs-on: ubuntu-latest
-    # only run when PR is not draft and when .release-version exists in the repository
-    # This was added for this workflow to not to be executed when a PR is made to .github repository.
+    # only run when PR is not draft to allow compatability with automated release PR creation
     if: ${{ !github.event.pull_request.draft }}
     steps:
     - uses: actions/checkout@v4
