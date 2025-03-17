@@ -1,25 +1,14 @@
 # Checks that the .release-version file has been updated
 name: Check release version
 
-on:
-  pull_request:
-    branches:
-      - master
-      - main
-    types:
-      # defaults
-      - opened
-      - synchronize
-      - reopened
-      # custom
-      - ready_for_review # required for Github-created PRs
+on: workflow_call
 
 jobs:
   check:
     runs-on: ubuntu-latest
     # only run when PR is not draft and when .release-version exists in the repository
     # This was added for this workflow to not to be executed when a PR is made to .github repository.
-    if: ${{ !github.event.pull_request.draft && github.repository != 'sanger/.github' }}
+    if: ${{ !github.event.pull_request.draft }}
     steps:
     - uses: actions/checkout@v4
       with:
