@@ -7,13 +7,6 @@ on:
         required: true
         type: string
 
-  workflow_dispatch:
-    inputs:
-      upload_url:
-        description: "Release upload URL"
-        required: true
-        type: string
-  pull_request:
 
 jobs:
   build-and-append-to-release:
