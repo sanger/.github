@@ -33,6 +33,8 @@ jobs:
 
       - name: Compile Build
         run: ./compile-build
+
+      # Adds the release to existing artifacts
       - uses: shogo82148/actions-upload-release-asset@v1.3.1
         with:
           upload_url: ${{ inputs.upload_url }}
