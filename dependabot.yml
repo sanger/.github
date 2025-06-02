@@ -1,0 +1,28 @@
+version: 2
+updates:
+  - package-ecosystem: "pip" # or other ecosystems like npm, bundler, etc.
+    directory: "/" # root directory or subdirectory of the manifest
+    schedule:
+      interval: "weekly"
+    labels:
+      - "dependencies"
+    # Add this section to label security PRs:
+    pull_request_branch_name:
+      separator: "-"
+    commit-message:
+      prefix: "deps"
+    open-pull-requests-limit: 5
+    # 👇 Add security-specific labels here
+    security-updates-only: false
+
+# Apply the security label to security updates
+  - package-ecosystem: "pip"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    labels:
+      - "security"
+    allow:
+      - dependency-type: "direct"
+    # Only security updates
+    security-updates-only: true
