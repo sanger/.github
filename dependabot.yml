@@ -6,6 +6,8 @@ updates:
       interval: "weekly"
     labels:
       - "dependencies"
+      - "python"
+      - "Technical Debt"
     # Add this section to label security PRs:
     pull_request_branch_name:
       separator: "-"
@@ -21,7 +23,9 @@ updates:
     schedule:
       interval: "weekly"
     labels:
-      - "security"
+      - "Security Updates"
+      - "python"
+      - "Technical Debt"
     allow:
       - dependency-type: "direct"
     # Only security updates
