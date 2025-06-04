@@ -1,4 +1,4 @@
-name: Build and Append to Release
+name: Build and release
 
 on:
   workflow_call:
@@ -8,7 +8,7 @@ on:
         type: string
 
 jobs:
-  build-and-append-to-release:
+  build-and-release:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
