@@ -1,0 +1,14 @@
+name: Setup Ruby
+
+description: "Checkout repo and setup Ruby"
+
+runs:
+  using: "composite"
+  steps:
+    - name: Checkout repo
+      uses: sanger/.github/.github/actions/checkout@y25-099-migrate-actions
+
+    - name: Set up Ruby
+      uses: ruby/setup-ruby@v1
+      with:
+        bundler-cache: true
