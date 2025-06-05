@@ -13,9 +13,6 @@ jobs:
   setup_node:
     runs-on: ubuntu-latest  }
     steps:
-      - name: Checkout repo
-        uses: sanger/.github/.github/actions/checkout@y25-099-migrate-actions
-        
       - name: Setup node
         uses: actions/setup-node@v4
         with:
