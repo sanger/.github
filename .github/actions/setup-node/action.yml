@@ -1,0 +1,18 @@
+name: Setup Node
+
+description: Setup Node.js with cache using a node version file
+
+inputs:
+  node-version-file:
+    description: 'Path to .nvmrc or node version file'
+    required: false
+    default: '.nvmrc'
+
+runs:
+  using: composite
+  steps:
+    - name: Setup node
+      uses: actions/setup-node@v4
+      with:
+        node-version-file: ${{ inputs.node-version-file }}
+        cache: yarn

@@ -1,6 +1,6 @@
 name: Setup Ruby
 
-description: "Checkout repo and setup Ruby"
+description: Checkout repo and setup Ruby
 
 runs:
   using: "composite"
