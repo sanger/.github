@@ -5,9 +5,6 @@ on:
     inputs: {}
 
 jobs:
-  checkout_repo:
-    uses: sanger/.github/.github/workflows/checkout.yml@y25-099-migrate-actions
-
   setup_ruby:
     runs-on: ubuntu-latest
     steps:

@@ -9,9 +9,6 @@ on:
         type: string
 
 jobs:
-  checkout_repo:
-    uses: sanger/.github/.github/workflows/checkout.yml@y25-099-migrate-actions
-
   release_build:
     runs-on: ubuntu-latest  
     uses: shogo82148/actions-upload-release-asset@v1.3.1
