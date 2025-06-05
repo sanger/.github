@@ -1,0 +1,17 @@
+name: Setup Environment
+
+on:
+  workflow_call: {}
+
+jobs:
+  setup:
+    runs-on: ubuntu-latest  
+    steps:
+      - uses: actions/checkout@${{ vars.CHECKOUT_VERSION }}
+
+      - name: Setup environment
+        env:
+          DBPORT: ${{ job.services.mysql.ports[3306] }}
+        run: |
+          bundle config path vendor/bundle
+          bin/setup

@@ -1,0 +1,16 @@
+name: Setup Ruby
+
+on:
+  workflow_call:
+    inputs: {}
+
+jobs:
+  setup:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@${{ vars.CHECKOUT_VERSION }}
+
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          bundler-cache: true # runs 'bundle install' and caches installed gems automatically
