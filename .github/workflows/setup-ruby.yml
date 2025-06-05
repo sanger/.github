@@ -8,7 +8,10 @@ jobs:
   setup_ruby:
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout repo
+        uses: sanger/.github/.github/actions/custom-checkout
+      
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
         with:
-          bundler-cache: true # runs 'bundle install' and caches installed gems automatically
+          bundler-cache: true

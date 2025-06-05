@@ -1,9 +1,0 @@
-name: Checkout Repository
-
-on:
-  workflow_call: {}
-  
-jobs:
-  checkout:
-    runs-on: ubuntu-latest  
-    uses: actions/checkout@v4
