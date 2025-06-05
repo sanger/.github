@@ -2,6 +2,8 @@ name: Setup Environment
 
 description: Checkout repo and setup environment
 
+# note: job.services is **NOT** available inside composite actions
+# you must pass any needed env variables as inputs instead
 inputs:
   dbport:
     description: 'MySQL DB port'
@@ -11,8 +13,6 @@ inputs:
 runs:
   using: composite
   steps:
-    # note: job.services is **NOT** available inside composite actions
-    # you must pass any needed env variables as inputs instead
     - name: Setup environment
       env:
         DBPORT: ${{ inputs.dbport }}
