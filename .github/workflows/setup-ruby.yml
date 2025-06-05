@@ -9,7 +9,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repo
-        uses: sanger/.github/.github/actions/custom-checkout
+        uses: sanger/.github/.github/actions/checkout@y25-099-migrate-actions
       
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
