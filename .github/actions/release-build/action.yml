@@ -2,6 +2,12 @@ name: Release Build
 
 description: Releases the build to existing artifacts
 
+inputs:
+  upload_url:
+    description: 'URL for the release asset'
+    required: true
+    type: string
+
 runs:
   using: composite
   steps:
@@ -11,9 +17,3 @@ runs:
         upload_url: ${{ inputs.upload_url }}
         asset_path: release.tar.gz
         asset_content_type: application/gzip
-
-inputs:
-  upload_url:
-    description: 'URL for the release asset'
-    required: true
-    type: string
