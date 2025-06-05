@@ -6,6 +6,8 @@ on:
 jobs:
   setup:
     runs-on: ubuntu-latest  
+    env:
+      CHECKOUT_VERSION: ${{ vars.CHECKOUT_VERSION }}
     
     steps:
       uses: actions/checkout@v4
