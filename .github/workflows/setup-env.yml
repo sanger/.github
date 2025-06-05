@@ -6,11 +6,9 @@ on:
 jobs:
   setup:
     runs-on: ubuntu-latest  
-    env:
-      CHECKOUT_VERSION: ${{ vars.CHECKOUT_VERSION }}
       
     steps:
-      - uses: actions/checkout@${{ vars.CHECKOUT_VERSION }}
+      - uses: sanger/.github/.github/workflows/checkout.yml@y25-099-migrate-actions
 
       - name: Setup environment
         env:

@@ -12,7 +12,7 @@ jobs:
   setup:
     runs-on: ubuntu-latest  
     steps:
-      - uses: actions/checkout@${{ vars.CHECKOUT_VERSION }}
+      - uses: sanger/.github/.github/workflows/checkout.yml@y25-099-migrate-actions
 
       # Adds the release to existing artifacts
       - uses: shogo82148/actions-upload-release-asset@v1.3.1
