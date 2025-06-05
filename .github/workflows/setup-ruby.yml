@@ -5,12 +5,12 @@ on:
     inputs: {}
 
 jobs:
-  setup:
+  checkout_repo:
+    uses: sanger/.github/.github/workflows/checkout.yml@y25-099-migrate-actions
+
+  setup_ruby:
     runs-on: ubuntu-latest
-
     steps:
-      - uses: sanger/.github/.github/workflows/checkout.yml@y25-099-migrate-actions
-
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
         with:

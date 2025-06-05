@@ -4,12 +4,12 @@ on:
   workflow_call: {}
 
 jobs:
-  setup:
-    runs-on: ubuntu-latest  
-      
-    steps:
-      - uses: sanger/.github/.github/workflows/checkout.yml@y25-099-migrate-actions
+  checkout_repo:
+    uses: sanger/.github/.github/workflows/checkout.yml@y25-099-migrate-actions
 
+  setup_env:
+    runs-on: ubuntu-latest  
+    steps:
       - name: Setup environment
         env:
           DBPORT: ${{ job.services.mysql.ports[3306] }}

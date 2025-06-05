@@ -10,12 +10,12 @@ on:
         default: '.nvmrc'
 
 jobs:
-  setup:
+  checkout_repo:
+    uses: sanger/.github/.github/workflows/checkout.yml@y25-099-migrate-actions
+
+  setup_node:
     runs-on: ubuntu-latest  }
-
     steps:
-      - uses: sanger/.github/.github/workflows/checkout.yml@y25-099-migrate-actions
-
       - name: Setup node
         uses: actions/setup-node@v4
         with:
