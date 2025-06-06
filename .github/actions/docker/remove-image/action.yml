@@ -45,7 +45,11 @@ runs:
             if [[ "$TAG" != *develop* ]]; then
               continue
             fi
-            if [[ "$CREATED_AT" < "${CUTOFF_DATE}T00:00:00Z" ]]; then
+
+            CREATED_AT_EPOCH=$(date -d "$CREATED_AT" +%s)
+            CUTOFF_EPOCH=$(date -d "${CUTOFF_DATE}T00:00:00Z" +%s)
+
+            if (( CREATED_AT_EPOCH < CUTOFF_EPOCH )); then
               echo "Marked for deletion: $TAG ($VERSION_ID), created at $CREATED_AT"
               DELETE_IDS+=("$VERSION_ID")
               break  # only need to match one tag per version
