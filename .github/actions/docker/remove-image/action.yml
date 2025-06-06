@@ -97,6 +97,7 @@ runs:
 
         for ID in "${IDS_ARRAY[@]}"; do
           echo "Deleting version ID: $ID"
+          echo "/orgs/${ORG}/packages/container/${PACKAGE_NAME_ENCODED}/versions/${ID}"
           gh api --method DELETE \
             "/orgs/${ORG}/packages/container/${PACKAGE_NAME_ENCODED}/versions/${ID}"
         done
