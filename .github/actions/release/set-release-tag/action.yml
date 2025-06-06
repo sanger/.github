@@ -18,7 +18,6 @@ inputs:
 
 outputs
   release_version_tag:
-    description: 'The full release version tag (with suffix if on develop branch)'
 
 runs:
   using: composite
