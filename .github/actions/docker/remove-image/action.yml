@@ -24,28 +24,29 @@ runs:
         PACKAGE=$(echo "$REPO" | cut -d/ -f2)
         CUTOFF_DATE=$(date -d '4 months ago' --iso-8601=seconds)
 
-        echo "Fetching tags for ghcr.io/$OWNER/$PACKAGE..."
+        echo "Dry run: Listing container versions for $OWNER/$PACKAGE"
+        echo "Cutoff date: $CUTOFF_DATE"
 
         gh api -H "Accept: application/vnd.github+json" \
           "/users/$OWNER/packages/container/$PACKAGE/versions" \
-          --paginate | jq -c '.[]' | while read version; do
-          
+          --paginate | jq -c '.[]' | while read -r version; do
+
           TAGS=$(echo "$version" | jq -r '.metadata.container.tags[]')
           UPDATED_AT=$(echo "$version" | jq -r '.updated_at')
           ID=$(echo "$version" | jq -r '.id')
 
           # Skip if tag is "latest" or matches "*develop*"
           if echo "$TAGS" | grep -qE 'latest|develop'; then
-            echo "Skipping $TAGS"
+            echo "Skipping tag(s): $TAGS"
             continue
           fi
 
           # Skip if newer than cutoff
           if [[ "$UPDATED_AT" > "$CUTOFF_DATE" ]]; then
-            echo "Skipping recent version tagged $TAGS (updated $UPDATED_AT)"
+            echo "Skipping recent tag(s): $TAGS (updated $UPDATED_AT)"
             continue
           fi
 
-          echo "Deleting version $ID with tags: $TAGS"
-          gh api -X DELETE "/users/$OWNER/packages/container/$PACKAGE/versions/$ID"
+          # Instead of deleting, just print what WOULD be deleted
+          echo "[DRY RUN] Would delete version $ID with tags: $TAGS (updated $UPDATED_AT)"
         done
