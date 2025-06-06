@@ -16,4 +16,4 @@ runs:
     - name: Push tagged docker release
       shell: bash
       run: >-
-        docker push docker.pkg.github.com/${ inputs.image_name }:${ inputs.release_version_tag }
+        docker push docker.pkg.github.com/${{ inputs.image_name }}:${{ inputs.release_version_tag }}
