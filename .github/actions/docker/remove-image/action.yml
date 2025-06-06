@@ -20,8 +20,7 @@ runs:
         image-names: ${{ inputs.repo_name }}/*
         cut-off: Four months ago UTC
         timestamp-to-use: updated_at
-        account-type: org
-        org-name: sanger
+        account: sanger
         keep-at-least: 5
         skip-tags: latest, *[!develop] # This will DELETE any images where the tag contains ANY characters in "develop", excluding '!'
         token: ${{ inputs.github_token }}
