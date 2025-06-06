@@ -1,0 +1,27 @@
+name: Remove old/unstable docker images
+
+inputs:
+  repo_name:
+    description: 'Name of the repository'
+    required: true
+    type: string
+
+  github_token:
+    description: 'GitHub application token'
+    required: true
+    type: string
+  
+runs:
+  using: composite
+  steps:
+    - name: Remove old releases
+      uses: snok/container-retention-policy@v2
+      with:
+        image-names: ${{ inputs.repo_name }}/*
+        cut-off: Four months ago UTC
+        timestamp-to-use: updated_at
+        account-type: org
+        org-name: sanger
+        keep-at-least: 5
+        skip-tags: latest, *[!develop] # This will DELETE any images where the tag contains ANY characters in "develop", excluding '!'
+        token: ${{ inputs.github_token }}
