@@ -19,4 +19,4 @@ runs:
       run: >-
         docker build .
         --file Dockerfile
-        --tag docker.pkg.github.com/${inputs.image_name}:${inputs.branch_name}
+        --tag docker.pkg.github.com/${{ inputs.image_name }}:${{ inputs.branch_name }}
