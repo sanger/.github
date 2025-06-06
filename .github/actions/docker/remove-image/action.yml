@@ -25,10 +25,8 @@ runs:
         echo "Dry run: Listing container versions for $OWNER/$PACKAGE"
         echo "Cutoff date: $CUTOFF_DATE"
 
-        # Authenticate gh CLI with token
-        echo "${GH_TOKEN}" | gh auth login --with-token
+        export GITHUB_TOKEN="${GH_TOKEN}"
 
-        # List package versions from GitHub Container Registry for the org
         gh api -H "Accept: application/vnd.github+json" \
           "/orgs/$OWNER/packages/container/$PACKAGE/versions" \
           --paginate | jq -c '.[]' | while read -r version; do
@@ -37,18 +35,15 @@ runs:
           UPDATED_AT=$(echo "$version" | jq -r '.updated_at')
           ID=$(echo "$version" | jq -r '.id')
 
-          # Skip protected tags
           if echo "$TAGS" | grep -qE 'latest|develop'; then
             echo "Skipping tag(s): $TAGS"
             continue
           fi
 
-          # Skip versions newer than cutoff
           if [[ "$UPDATED_AT" > "$CUTOFF_DATE" ]]; then
             echo "Skipping recent tag(s): $TAGS (updated $UPDATED_AT)"
             continue
           fi
 
-          # Dry run: print what would be deleted
           echo "[DRY RUN] Would delete version $ID with tags: $TAGS (updated $UPDATED_AT)"
         done
