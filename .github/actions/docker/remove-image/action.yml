@@ -1,52 +1,54 @@
-name: Clean up container images
-description: Deletes old container image tags manually using gh CLI
+name: Remove old Docker images
+
+description: Action for removing old Docker container package versions using GitHub API and `gh` CLI.
 
 inputs:
   repo_name:
-    description: "The name of the repository"
+    description: 'Name of the repository/package containing Docker images'
     required: true
   github_token:
-    description: "GitHub token with packages:write scope"
+    description: 'GitHub token with read:packages permission'
     required: true
 
 runs:
-  using: composite
+  using: "composite"
   steps:
-    - name: Authenticate with GitHub CLI
+    - name: Cleanup of old non-stable container packages
       shell: bash
-      run: echo "${{ inputs.github_token }}" | gh auth login --with-token
-
-    - name: Get and delete old tags
-      shell: bash
+      env:
+        GH_TOKEN: ${{ inputs.github_token }}
       run: |
-        REPO="${{ inputs.repo_name }}"
-        OWNER=$(echo "$REPO" | cut -d/ -f1)
-        PACKAGE=$(echo "$REPO" | cut -d/ -f2)
+        OWNER="sanger"
+        PACKAGE="${{ inputs.repo_name }}"
         CUTOFF_DATE=$(date -d '4 months ago' --iso-8601=seconds)
 
         echo "Dry run: Listing container versions for $OWNER/$PACKAGE"
         echo "Cutoff date: $CUTOFF_DATE"
 
+        # Authenticate gh CLI with token
+        echo "${GH_TOKEN}" | gh auth login --with-token
+
+        # List package versions from GitHub Container Registry for the org
         gh api -H "Accept: application/vnd.github+json" \
-          "/users/$OWNER/packages/container/$PACKAGE/versions" \
+          "/orgs/$OWNER/packages/container/$PACKAGE/versions" \
           --paginate | jq -c '.[]' | while read -r version; do
 
           TAGS=$(echo "$version" | jq -r '.metadata.container.tags[]')
           UPDATED_AT=$(echo "$version" | jq -r '.updated_at')
           ID=$(echo "$version" | jq -r '.id')
 
-          # Skip if tag is "latest" or matches "*develop*"
+          # Skip protected tags
           if echo "$TAGS" | grep -qE 'latest|develop'; then
             echo "Skipping tag(s): $TAGS"
             continue
           fi
 
-          # Skip if newer than cutoff
+          # Skip versions newer than cutoff
           if [[ "$UPDATED_AT" > "$CUTOFF_DATE" ]]; then
             echo "Skipping recent tag(s): $TAGS (updated $UPDATED_AT)"
             continue
           fi
 
-          # Instead of deleting, just print what WOULD be deleted
+          # Dry run: print what would be deleted
           echo "[DRY RUN] Would delete version $ID with tags: $TAGS (updated $UPDATED_AT)"
         done
