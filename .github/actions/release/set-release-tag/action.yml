@@ -18,11 +18,13 @@ inputs:
 
 outputs:
   release_version_tag:
+    value: ${{ steps.set_tag.outputs.release_version_tag }}
 
 runs:
   using: composite
   steps:
     - name: Set release tag
+      id: set_tag
       shell: bash
       run: |
         VERSION="${{ inputs.release_version }}"
