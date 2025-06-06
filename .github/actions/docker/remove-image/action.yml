@@ -15,7 +15,7 @@ runs:
   using: composite
   steps:
     - name: Remove old releases
-      uses: snok/container-retention-policy@v3
+      uses: snok/container-retention-policy@v2
       with:
         image-names: ${{ inputs.repo_name }}/*
         cut-off: Four months ago UTC
