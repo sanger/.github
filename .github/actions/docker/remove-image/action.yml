@@ -1,26 +1,51 @@
-name: Remove old/unstable docker images
+name: Clean up container images
+description: Deletes old container image tags manually using gh CLI
 
 inputs:
   repo_name:
-    description: 'Name of the repository'
+    description: "The name of the repository"
     required: true
-    type: string
-
   github_token:
-    description: 'GitHub application token'
+    description: "GitHub token with packages:write scope"
     required: true
-    type: string
-  
+
 runs:
   using: composite
   steps:
-    - name: Remove old releases
-      uses: snok/container-retention-policy@v3.0.0
-      with:
-        image-names: ${{ inputs.repo_name }}/*
-        cut-off: Four months ago UTC
-        timestamp-to-use: updated_at
-        account: sanger
-        keep-at-least: 5
-        skip-tags: latest, *[!develop] # This will DELETE any images where the tag contains ANY characters in "develop", excluding '!'
-        token: ${{ inputs.github_token }}
+    - name: Authenticate with GitHub CLI
+      shell: bash
+      run: echo "${{ inputs.github_token }}" | gh auth login --with-token
+
+    - name: Get and delete old tags
+      shell: bash
+      run: |
+        REPO="${{ inputs.repo_name }}"
+        OWNER=$(echo "$REPO" | cut -d/ -f1)
+        PACKAGE=$(echo "$REPO" | cut -d/ -f2)
+        CUTOFF_DATE=$(date -d '4 months ago' --iso-8601=seconds)
+
+        echo "Fetching tags for ghcr.io/$OWNER/$PACKAGE..."
+
+        gh api -H "Accept: application/vnd.github+json" \
+          "/users/$OWNER/packages/container/$PACKAGE/versions" \
+          --paginate | jq -c '.[]' | while read version; do
+          
+          TAGS=$(echo "$version" | jq -r '.metadata.container.tags[]')
+          UPDATED_AT=$(echo "$version" | jq -r '.updated_at')
+          ID=$(echo "$version" | jq -r '.id')
+
+          # Skip if tag is "latest" or matches "*develop*"
+          if echo "$TAGS" | grep -qE 'latest|develop'; then
+            echo "Skipping $TAGS"
+            continue
+          fi
+
+          # Skip if newer than cutoff
+          if [[ "$UPDATED_AT" > "$CUTOFF_DATE" ]]; then
+            echo "Skipping recent version tagged $TAGS (updated $UPDATED_AT)"
+            continue
+          fi
+
+          echo "Deleting version $ID with tags: $TAGS"
+          gh api -X DELETE "/users/$OWNER/packages/container/$PACKAGE/versions/$ID"
+        done
