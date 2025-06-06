@@ -31,6 +31,8 @@ runs:
         VERSIONS_JSON=$(gh api -H "Accept: application/vnd.github+json" \
           "/orgs/${ORG}/packages/container/${PACKAGE_NAME_ENCODED}/versions")
 
+        echo "$VERSIONS_JSON" | jq length
+
         DELETE_IDS=()
 
         while IFS= read -r version; do
