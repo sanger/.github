@@ -25,8 +25,30 @@ runs:
         ORG="sanger"
         PACKAGE_NAME="${{ inputs.repo_name }}/${{ inputs.repo_name }}"
         PACKAGE_NAME_ENCODED=$(echo -n "$PACKAGE_NAME" | jq -sRr @uri)
-
         CUTOFF_DATE=$(date -d "1 week ago" +%Y-%m-%d)
+
+        ALL_VERSIONS="[]"
+        PAGE=1
+        PER_PAGE=100
+
+        while :; do
+          PAGE_JSON=$(gh api -H "Accept: application/vnd.github+json" \
+            "/orgs/${ORG}/packages/container/${PACKAGE_NAME_ENCODED}/versions?per_page=${PER_PAGE}&page=${PAGE}")
+
+          COUNT=$(echo "$PAGE_JSON" | jq length)
+          if [[ $COUNT -eq 0 ]]; then
+            break
+          fi
+
+          # Merge into accumulated result
+          ALL_VERSIONS=$(jq -s '.[0] + .[1]' <(echo "$ALL_VERSIONS") <(echo "$PAGE_JSON"))
+
+          PAGE=$((PAGE + 1))
+        done
+
+        # Output total count
+        echo "$ALL_VERSIONS" | jq length
+
 
         VERSIONS_JSON=$(gh api -H "Accept: application/vnd.github+json" \
           "/orgs/${ORG}/packages/container/${PACKAGE_NAME_ENCODED}/versions")
