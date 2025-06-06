@@ -12,7 +12,8 @@ inputs:
     type: string
   
 outputs:
-  github_token: 
+  github_token:
+    value: ${{ steps.app-token.outputs.token }}
 
 runs:
   using: composite
@@ -26,4 +27,4 @@ runs:
     
     - name: Export token
       shell: bash
-      run: echo "github_token=${{ steps.app-token.outputs.tokn }}" >> $GITHUB_OUTPUT
+      run: echo "github_token=${{ steps.app-token.outputs.token }}" >> $GITHUB_OUTPUT
