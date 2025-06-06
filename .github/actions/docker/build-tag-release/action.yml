@@ -15,6 +15,7 @@ runs:
   using: composite
   steps:
     - name: Build and tag the image for testing and release
+      shell: bash
       run: >-
         docker build .
         --file Dockerfile

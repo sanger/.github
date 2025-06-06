@@ -25,4 +25,5 @@ runs:
         private-key: ${{ inputs.private_key }}
     
     - name: Export token
+      shell: bash
       run: echo "github_token=${{ steps.app-token.outputs.tokn }}" >> $GITHUB_OUTPUT
