@@ -31,7 +31,7 @@ runs:
         BRANCH="${{ inputs.branch_name }}"
 
         if [[ "$BRANCH" == "develop" ]]; then
-          TAG="${VERSION}-${inputs.github_run_id}-develop"
+          TAG="${VERSION}-${{ inputs.github_run_id }}-develop"
         else
           TAG="$VERSION"
         fi

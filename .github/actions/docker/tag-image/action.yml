@@ -23,5 +23,5 @@ runs:
       shell: bash
       run: >-
         docker tag
-        docker.pkg.github.com/${ inputs.image_name }:${ inputs.branch_name }
-        docker.pkg.github.com/${ inputs.image_name }:${{ inputs.release_version_tag }}
+        docker.pkg.github.com/${{ inputs.image_name }}:${{ inputs.branch_name }}
+        docker.pkg.github.com/${{ inputs.image_name }}:${{ inputs.release_version_tag }}
