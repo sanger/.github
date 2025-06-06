@@ -16,7 +16,7 @@ inputs:
     required: true
     type: string
 
-outputs
+outputs:
   release_version_tag:
 
 runs:
