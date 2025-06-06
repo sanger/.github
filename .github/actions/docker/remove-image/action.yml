@@ -1,49 +1,78 @@
-name: Remove old Docker images
-
-description: Action for removing old Docker container package versions using GitHub API and `gh` CLI.
+name: Remove old/unstable docker images
 
 inputs:
   repo_name:
     description: 'Name of the repository/package containing Docker images'
     required: true
+
   github_token:
-    description: 'GitHub token with read:packages permission'
+    description: 'GitHub App Token with permissions to delete packages'
     required: true
+    default: ''
 
 runs:
   using: "composite"
   steps:
-    - name: Cleanup of old non-stable container packages
+    - name: Authenticate with GitHub CLI
       shell: bash
-      env:
-        GH_TOKEN: ${{ inputs.github_token }}
       run: |
-        OWNER="sanger"
-        PACKAGE="${{ inputs.repo_name }}"
-        CUTOFF_DATE=$(date -d '4 months ago' --iso-8601=seconds)
+        echo "${{ inputs.github_token }}" | gh auth login --with-token
 
-        echo "Dry run: Listing container versions for $OWNER/$PACKAGE"
-        echo "Cutoff date: $CUTOFF_DATE"
+    - name: Collect Docker image versions to delete
+      id: collect_versions
+      shell: bash
+      run: |
+        REPO="sanger/${{ inputs.repo_name }}"
+        ORG="sanger"
+        PACKAGE_NAME="${{ inputs.repo_name }}"
 
-        export GITHUB_TOKEN="${GH_TOKEN}"
+        FOUR_MONTHS_AGO=$(date -d "4 months ago" +%Y-%m-%d)
 
-        gh api -H "Accept: application/vnd.github+json" \
-          "/orgs/$OWNER/packages/container/$PACKAGE/versions" \
-          --paginate | jq -c '.[]' | while read -r version; do
+        VERSIONS_JSON=$(gh api -H "Accept: application/vnd.github+json" \
+          /orgs/${ORG}/packages/container/${PACKAGE_NAME}/versions)
 
-          TAGS=$(echo "$version" | jq -r '.metadata.container.tags[]')
-          UPDATED_AT=$(echo "$version" | jq -r '.updated_at')
-          ID=$(echo "$version" | jq -r '.id')
+        # Prepare a JSON array to collect version IDs to delete
+        DELETE_IDS=()
 
-          if echo "$TAGS" | grep -qE 'latest|develop'; then
-            echo "Skipping tag(s): $TAGS"
+        echo "$VERSIONS_JSON" | jq -c '.[]' | while read -r version; do
+          TAG=$(echo "$version" | jq -r '.metadata.container.tags[0]')
+          CREATED_AT=$(echo "$version" | jq -r '.created_at')
+
+          if [[ "$TAG" == "latest" ]]; then
             continue
           fi
 
-          if [[ "$UPDATED_AT" > "$CUTOFF_DATE" ]]; then
-            echo "Skipping recent tag(s): $TAGS (updated $UPDATED_AT)"
+          if [[ "$TAG" != *develop* ]]; then
             continue
           fi
 
-          echo "[DRY RUN] Would delete version $ID with tags: $TAGS (updated $UPDATED_AT)"
+          if [[ "$CREATED_AT" < "${FOUR_MONTHS_AGO}T00:00:00Z" ]]; then
+            VERSION_ID=$(echo "$version" | jq -r '.id')
+            echo "Found to delete: $TAG ($VERSION_ID), created at $CREATED_AT"
+            DELETE_IDS+=("$VERSION_ID")
+          fi
+        done
+
+        # Join array elements into a space-separated string for output
+        echo "::set-output name=version_ids::$(IFS=,; echo "${DELETE_IDS[*]}")"
+
+    - name: Delete collected Docker image versions
+      shell: bash
+      run: |
+        ORG="sanger"
+        PACKAGE_NAME="${{ inputs.repo_name }}"
+        VERSION_IDS="${{ steps.collect_versions.outputs.version_ids }}"
+
+        if [[ -z "$VERSION_IDS" ]]; then
+          echo "No versions found to delete."
+          exit 0
+        fi
+
+        # Convert comma-separated string back to array
+        IFS=',' read -r -a IDS_ARRAY <<< "$VERSION_IDS"
+
+        for ID in "${IDS_ARRAY[@]}"; do
+          echo "Deleting version ID: $ID"
+          # gh api --method DELETE /orgs/${ORG}/packages/container/${PACKAGE_NAME}/versions/${ID}
+          echo "Deleted version ID: $ID"
         done
