@@ -1,0 +1,38 @@
+name: Set release tag
+
+inputs:
+  release_version:
+    description: 'Release version number'
+    required: true
+    type: string
+
+  branch_name:
+    description: 'Name of the current branch'
+    required: true
+    type: string
+
+  github_run_id:
+    description: 'Name of the current branch'
+    required: true
+    type: string
+
+outputs
+  release_version_tag:
+    description: 'The full release version tag (with suffix if on develop branch)'
+
+runs:
+  using: composite
+  steps:
+    - name: Set release tag
+      shell: bash
+      run: |
+        VERSION="${{ inputs.release_version }}"
+        BRANCH="${{ inputs.branch_name }}"
+
+        if [[ "$BRANCH" == "develop" ]]; then
+          TAG="${VERSION}-${inputs.github_run_id}-develop"
+        else
+          TAG="$VERSION"
+        fi
+
+        echo "release_version_tag=$TAG" >> $GITHUB_OUTPUT
