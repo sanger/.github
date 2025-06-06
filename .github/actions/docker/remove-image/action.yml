@@ -27,7 +27,7 @@ runs:
         PACKAGE_NAME_ENCODED=$(echo -n "$PACKAGE_NAME" | jq -sRr @uri)
         CUTOFF_DATE=$(date -d "1 week ago" +%Y-%m-%d)
 
-        ALL_VERSIONS="[]"
+        VERSIONS_JSON="[]"
         PAGE=1
         PER_PAGE=100
 
@@ -41,18 +41,12 @@ runs:
           fi
 
           # Merge into accumulated result
-          ALL_VERSIONS=$(jq -s '.[0] + .[1]' <(echo "$ALL_VERSIONS") <(echo "$PAGE_JSON"))
+          VERSIONS_JSON=$(jq -s '.[0] + .[1]' <(echo "$VERSIONS_JSON") <(echo "$PAGE_JSON"))
 
           PAGE=$((PAGE + 1))
         done
 
         # Output total count
-        echo "$ALL_VERSIONS" | jq length
-
-
-        VERSIONS_JSON=$(gh api -H "Accept: application/vnd.github+json" \
-          "/orgs/${ORG}/packages/container/${PACKAGE_NAME_ENCODED}/versions")
-
         echo "$VERSIONS_JSON" | jq length
 
         DELETE_IDS=()
