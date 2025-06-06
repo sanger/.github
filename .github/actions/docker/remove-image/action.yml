@@ -85,7 +85,7 @@ runs:
       run: |
         ORG="sanger"
         PACKAGE_NAME="${{ inputs.repo_name }}/${{ inputs.repo_name }}"
-        PACKAGE_NAME_ENCODED=$(echo "$PACKAGE_NAME" | jq -sRr @uri)
+        PACKAGE_NAME_ENCODED=$(echo -n "$PACKAGE_NAME" | jq -sRr @uri)
         VERSION_IDS="${{ steps.collect_versions.outputs.version_ids }}"
 
         if [[ -z "$VERSION_IDS" ]]; then
