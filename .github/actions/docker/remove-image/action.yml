@@ -23,7 +23,7 @@ runs:
         ORG="sanger"
         PACKAGE_NAME="${{ inputs.repo_name }}/${{ inputs.repo_name }}"
         PACKAGE_NAME_ENCODED=$(echo -n "$PACKAGE_NAME" | jq -sRr @uri)
-        CUTOFF_DATE=$(date -d "${{ inputs.cutoff_date }} months ago" +%Y-%m-%d)
+        CUTOFF_DATE=$(date -d "2 hours ago" +%Y-%m-%d)
 
         VERSIONS_JSON="[]"
         PAGE=1
