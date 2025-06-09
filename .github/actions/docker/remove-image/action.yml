@@ -86,7 +86,7 @@ runs:
         echo "Total develop images: $TOTAL_DEVELOP"
         echo "Initially marked for deletion: ${#DELETE_IDS[@]}"
 
-        MAX_DELETIONS=$((TOTAL_DEVELOP - 7))
+        MAX_DELETIONS=$((TOTAL_DEVELOP - 5))
         if (( MAX_DELETIONS <= 0 )); then
           echo "Not enough develop images to delete safely (need to keep at least 5)."
           echo "version_ids=" >> "$GITHUB_OUTPUT"
