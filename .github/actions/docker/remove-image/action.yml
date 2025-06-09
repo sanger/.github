@@ -50,7 +50,8 @@ runs:
           PAGE=$((PAGE + 1))
         done
 
-        echo "$VERSIONS_JSON" | jq length
+        NUM_VERSIONS=$(echo "$VERSIONS_JSON" | jq length)
+      
 
         DELETE_IDS=()
 
@@ -78,11 +79,10 @@ runs:
           done
         done < <(echo "$VERSIONS_JSON" | jq -c '.[]')
 
-        NUM_TOTAL_IDS=${#VERSIONS_JSON[@]}
-        echo "Collected $NUM_TOTAL_IDS version IDs to delete"
-
+        echo "Collected $DELETE_IDS version IDs to delete"
+        
         # Check if fewer than 5 and skip
-        if (( NUM_TOTAL_IDS < 5 )); then
+        if (( NUM_VERSIONS < 5 )); then
           echo "Fewer than 5 images found — skipping deletion."
           exit 0
         fi
