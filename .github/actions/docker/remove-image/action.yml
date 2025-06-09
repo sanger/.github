@@ -78,8 +78,8 @@ runs:
             if (( CREATED_AT_EPOCH < CUTOFF_EPOCH )); then
               echo "Marked for deletion: $TAG ($VERSION_ID), created at $CREATED_AT"
               DELETE_IDS+=("$VERSION_ID")
-              break
             fi
+            break
           done
         done < <(echo "$VERSIONS_JSON" | jq -c '.[]')
 
