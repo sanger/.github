@@ -31,6 +31,12 @@ runs:
             -H "Accept: application/vnd.github+json" \
             "https://api.github.com/orgs/${ORG}/packages/container/${PACKAGE_NAME_ENCODED}/versions?per_page=${PER_PAGE}&page=${PAGE}")
 
+          # Check if API returned an error object instead of array
+          if echo "$PAGE_JSON" | jq -e 'if type=="object" and has("message") then true else false end' >/dev/null; then
+            echo "GitHub API error: $(echo "$PAGE_JSON" | jq -r .message)"
+            exit 1
+          fi
+
           COUNT=$(echo "$PAGE_JSON" | jq length)
           if [[ $COUNT -eq 0 ]]; then
             break
