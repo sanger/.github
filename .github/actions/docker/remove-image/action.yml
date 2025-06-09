@@ -9,17 +9,11 @@ inputs:
     description: 'GitHub App Token with permissions to delete packages'
     required: true
     default: ''
-
+    
 runs:
   using: "composite"
   steps:
-    - name: Authenticate with GitHub CLI
-      shell: bash
-      run: |
-        echo "${{ inputs.github_token }}" | gh auth login --with-token
-
     - name: Collect Docker image versions to delete
-      id: collect_versions
       shell: bash
       run: |
         ORG="sanger"
@@ -32,21 +26,21 @@ runs:
         PER_PAGE=100
 
         while :; do
-          PAGE_JSON=$(gh api -H "Accept: application/vnd.github+json" \
-            "/orgs/${ORG}/packages/container/${PACKAGE_NAME_ENCODED}/versions?per_page=${PER_PAGE}&page=${PAGE}")
+          PAGE_JSON=$(curl -s \
+            -H "Authorization: Bearer ${{ inputs.github_token }}" \
+            -H "Accept: application/vnd.github+json" \
+            "https://api.github.com/orgs/${ORG}/packages/container/${PACKAGE_NAME_ENCODED}/versions?per_page=${PER_PAGE}&page=${PAGE}")
 
           COUNT=$(echo "$PAGE_JSON" | jq length)
           if [[ $COUNT -eq 0 ]]; then
             break
           fi
 
-          # Merge into accumulated result
           VERSIONS_JSON=$(jq -s '.[0] + .[1]' <(echo "$VERSIONS_JSON") <(echo "$PAGE_JSON"))
 
           PAGE=$((PAGE + 1))
         done
 
-        # Output total count
         echo "$VERSIONS_JSON" | jq length
 
         DELETE_IDS=()
@@ -70,14 +64,13 @@ runs:
             if (( CREATED_AT_EPOCH < CUTOFF_EPOCH )); then
               echo "Marked for deletion: $TAG ($VERSION_ID), created at $CREATED_AT"
               DELETE_IDS+=("$VERSION_ID")
-              break  # only need to match one tag per version
+              break
             fi
           done
         done < <(echo "$VERSIONS_JSON" | jq -c '.[]')
 
         echo "Collected ${#DELETE_IDS[@]} version IDs to delete"
 
-        # Output as comma-separated string
         echo "version_ids=$(IFS=,; echo "${DELETE_IDS[*]}")" >> "$GITHUB_OUTPUT"
 
     - name: Delete collected Docker image versions
@@ -97,7 +90,8 @@ runs:
 
         for ID in "${IDS_ARRAY[@]}"; do
           echo "Deleting version ID: $ID"
-          echo "/orgs/${ORG}/packages/container/${PACKAGE_NAME_ENCODED}/versions/${ID}"
-          gh api --method DELETE \
-            "/orgs/${ORG}/packages/container/${PACKAGE_NAME_ENCODED}/versions/${ID}"
+          curl -X DELETE \
+            -H "Authorization: Bearer ${{ inputs.github_token }}" \
+            -H "Accept: application/vnd.github+json" \
+            "https://api.github.com/orgs/${ORG}/packages/container/${PACKAGE_NAME_ENCODED}/versions/${ID}"
         done
