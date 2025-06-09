@@ -109,6 +109,8 @@ runs:
         PACKAGE_NAME_ENCODED=$(echo -n "$PACKAGE_NAME" | jq -sRr @uri)
         VERSION_IDS="${{ steps.collect_versions.outputs.version_ids }}"
 
+        echo $VERSION_IDS
+
         if [[ -z "$VERSION_IDS" || "$VERSION_IDS" == "null" ]]; then
           echo "No versions found to delete."
           exit 0
