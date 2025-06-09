@@ -98,6 +98,8 @@ runs:
         IFS=',' read -r -a IDS_ARRAY <<< "$VERSION_IDS"
         NUM_IDS=${#IDS_ARRAY[@]}
 
+        echo $NUM_IDS
+
         if (( NUM_IDS < 5 )); then
           echo "Only $NUM_IDS version(s) marked for deletion — skipping because fewer than 5."
           exit 0
