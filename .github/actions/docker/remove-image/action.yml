@@ -2,14 +2,13 @@ name: Remove old/unstable docker images
 
 inputs:
   repo_name:
-    description: 'Name of the repository/package containing Docker images'
+    description: "Name of the repository/package containing Docker images"
     required: true
 
   github_token:
-    description: 'GitHub App Token with permissions to delete packages'
+    description: "GitHub App Token with permissions to delete packages"
     required: true
-    default: ''
-    
+
 runs:
   using: "composite"
   steps:

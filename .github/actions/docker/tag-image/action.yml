@@ -2,17 +2,17 @@ name: Tag a docker image with the release version
 
 inputs:
   image_name:
-    description: 'Name of the docker image'
+    description: "Name of the docker image"
     required: true
     type: string
 
   branch_name:
-    description: 'Name of the current branch'
+    description: "Name of the current branch"
     required: true
     type: string
 
   release_version_tag:
-    description: 'The tag name for the image'
+    description: "The tag name for the image"
     required: true
     type: string
 

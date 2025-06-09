@@ -1,12 +1,12 @@
 name: Push a docker release to the registry
 inputs:
   image_name:
-    description: 'Name of the docker image'
+    description: "Name of the docker image"
     required: true
     type: string
 
   release_version_tag:
-    description: 'The tag name for the image'
+    description: "The tag name for the image"
     required: true
     type: string
 

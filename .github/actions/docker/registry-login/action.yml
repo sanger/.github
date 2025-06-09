@@ -2,12 +2,12 @@ name: Login to docker registry
 
 inputs:
   github_user:
-    description: 'Current user in the action environment'
+    description: "Current user in the action environment"
     required: true
     type: string
 
   github_token:
-    description: 'Token for the GitHub action'
+    description: "Token for the GitHub action"
     required: true
     type: string
 

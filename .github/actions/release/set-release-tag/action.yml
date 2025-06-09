@@ -2,17 +2,17 @@ name: Set release tag
 
 inputs:
   release_version:
-    description: 'Release version number'
+    description: "Release version number"
     required: true
     type: string
 
   branch_name:
-    description: 'Name of the current branch'
+    description: "Name of the current branch"
     required: true
     type: string
 
   github_run_id:
-    description: 'Name of the current branch'
+    description: "Name of the current branch"
     required: true
     type: string
 

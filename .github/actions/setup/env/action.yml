@@ -6,7 +6,7 @@ description: Checkout repo and setup environment
 # you must pass any needed env variables as inputs instead
 inputs:
   dbport:
-    description: 'MySQL DB port'
+    description: "MySQL DB port"
     required: true
 
 runs:
