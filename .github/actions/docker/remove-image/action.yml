@@ -19,7 +19,7 @@ runs:
         ORG="sanger"
         PACKAGE_NAME="${{ inputs.repo_name }}/${{ inputs.repo_name }}"
         PACKAGE_NAME_ENCODED=$(echo -n "$PACKAGE_NAME" | jq -sRr @uri)
-        CUTOFF_DATE=$(date -d "4 months ago" +%Y-%m-%d)
+        CUTOFF_DATE=$(date -d "2 days ago" +%Y-%m-%d)
 
         VERSIONS_JSON="[]"
         PAGE=1
@@ -90,8 +90,8 @@ runs:
 
         for ID in "${IDS_ARRAY[@]}"; do
           echo "Deleting version ID: $ID"
-          curl -X DELETE \
-            -H "Authorization: Bearer ${{ inputs.github_token }}" \
-            -H "Accept: application/vnd.github+json" \
-            "https://api.github.com/orgs/${ORG}/packages/container/${PACKAGE_NAME_ENCODED}/versions/${ID}"
+          # curl -X DELETE \
+          #   -H "Authorization: Bearer ${{ inputs.github_token }}" \
+          #   -H "Accept: application/vnd.github+json" \
+          #   "https://api.github.com/orgs/${ORG}/packages/container/${PACKAGE_NAME_ENCODED}/versions/${ID}"
         done
