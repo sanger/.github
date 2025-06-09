@@ -52,9 +52,10 @@ runs:
         done
 
         NUM_VERSIONS=$(echo "$VERSIONS_JSON" | jq length)
-        TOTAL_DEVELOP=$(echo "$VERSIONS_JSON" | jq '[.[] | select(.metadata.container.tags[]? | test("develop"))] | length')
+        echo "Total image versions found: $NUM_VERSIONS"
 
         DELETE_IDS=()
+        TOTAL_DEVELOP=0
 
         while IFS= read -r version; do
           TAGS=$(echo "$version" | jq -r '.metadata.container.tags[]?')
@@ -69,6 +70,8 @@ runs:
               continue
             fi
 
+            TOTAL_DEVELOP=$((TOTAL_DEVELOP + 1))
+
             CREATED_AT_EPOCH=$(date -d "$CREATED_AT" +%s)
             CUTOFF_EPOCH=$(date -d "${CUTOFF_DATE}T00:00:00Z" +%s)
 
@@ -80,20 +83,22 @@ runs:
           done
         done < <(echo "$VERSIONS_JSON" | jq -c '.[]')
 
-        NUM_DELETE_IDS=${#DELETE_IDS[@]}
-        REMAINING_DEVELOP=$((TOTAL_DEVELOP - NUM_DELETE_IDS))
-
         echo "Total develop images: $TOTAL_DEVELOP"
-        echo "Marked for deletion: $NUM_DELETE_IDS"
-        echo "Would remain after deletion: $REMAINING_DEVELOP"
+        echo "Initially marked for deletion: ${#DELETE_IDS[@]}"
 
-        if (( REMAINING_DEVELOP < 5 )); then
-          echo "Skipping deletion to preserve at least 5 develop images."
+        MAX_DELETIONS=$((TOTAL_DEVELOP - 5))
+        if (( MAX_DELETIONS <= 0 )); then
+          echo "Not enough develop images to delete safely (need to keep at least 5)."
           echo "version_ids=" >> "$GITHUB_OUTPUT"
           exit 0
         fi
 
-        echo "Collected ${#DELETE_IDS[@]} version IDs to delete"
+        if (( ${#DELETE_IDS[@]} > MAX_DELETIONS )); then
+          echo "Trimming deletion list to preserve 5 develop images."
+          DELETE_IDS=("${DELETE_IDS[@]:0:$MAX_DELETIONS}")
+        fi
+
+        echo "Final deletions: ${#DELETE_IDS[@]}"
         echo "version_ids=$(IFS=,; echo "${DELETE_IDS[*]}")" >> "$GITHUB_OUTPUT"
 
     - name: Delete collected Docker image versions
