@@ -40,6 +40,4 @@ runs:
         fi
 
         echo "$TAG"
-
-
         echo "release_version_tag=$TAG" >> $GITHUB_OUTPUT
