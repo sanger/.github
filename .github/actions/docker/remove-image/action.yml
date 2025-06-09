@@ -93,10 +93,16 @@ runs:
           exit 0
         fi
 
+        echo "First value: ${DELETE_IDS[0]}"
+        echo "Last value: ${DELETE_IDS[-1]}"
+
         if (( ${#DELETE_IDS[@]} > MAX_DELETIONS )); then
           echo "Trimming deletion list to preserve 5 develop images."
           DELETE_IDS=("${DELETE_IDS[@]: -$MAX_DELETIONS}")
         fi
+
+        echo "First value: ${DELETE_IDS[0]}"
+        echo "Last value: ${DELETE_IDS[-1]}"
 
         echo "Final deletions: ${#DELETE_IDS[@]}"
         echo "version_ids=$(IFS=,; echo "${DELETE_IDS[*]}")" >> "$GITHUB_OUTPUT"
