@@ -17,6 +17,7 @@ runs:
   using: "composite"
   steps:
     - name: Collect Docker image versions to delete
+      id: collect_versions
       shell: bash
       run: |
         ORG="sanger"
@@ -51,7 +52,7 @@ runs:
         done
 
         NUM_VERSIONS=$(echo "$VERSIONS_JSON" | jq length)
-      
+        TOTAL_DEVELOP=$(echo "$VERSIONS_JSON" | jq '[.[] | select(.metadata.container.tags[]? | test("develop"))] | length')
 
         DELETE_IDS=()
 
@@ -79,14 +80,20 @@ runs:
           done
         done < <(echo "$VERSIONS_JSON" | jq -c '.[]')
 
-        echo "Collected $DELETE_IDS version IDs to delete"
-        
-        # Check if fewer than 5 and skip
-        if (( NUM_VERSIONS < 5 )); then
-          echo "Fewer than 5 images found — skipping deletion."
+        NUM_DELETE_IDS=${#DELETE_IDS[@]}
+        REMAINING_DEVELOP=$((TOTAL_DEVELOP - NUM_DELETE_IDS))
+
+        echo "Total develop images: $TOTAL_DEVELOP"
+        echo "Marked for deletion: $NUM_DELETE_IDS"
+        echo "Would remain after deletion: $REMAINING_DEVELOP"
+
+        if (( REMAINING_DEVELOP < 5 )); then
+          echo "Skipping deletion to preserve at least 5 develop images."
+          echo "version_ids=" >> "$GITHUB_OUTPUT"
           exit 0
         fi
 
+        echo "Collected ${#DELETE_IDS[@]} version IDs to delete"
         echo "version_ids=$(IFS=,; echo "${DELETE_IDS[*]}")" >> "$GITHUB_OUTPUT"
 
     - name: Delete collected Docker image versions
