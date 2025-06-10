@@ -33,7 +33,7 @@ runs:
         echo "$VERSION"
         echo "$BRANCH"
 
-        if [[ "$BRANCH" == "y25-099-3-migrate-actions" ]]; then
+        if [[ "$BRANCH" == "develop" ]]; then
           TAG="${VERSION}-${{ inputs.github_run_id }}-develop"
         else
           TAG="$VERSION"
