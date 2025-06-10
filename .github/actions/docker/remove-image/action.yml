@@ -29,6 +29,8 @@ runs:
         PAGE=1
         PER_PAGE=100
 
+        # This will get all versions (has pagination of the API to return ALL results)
+
         while :; do
           PAGE_JSON=$(curl -s \
             -H "Authorization: Bearer ${{ inputs.github_token }}" \
@@ -40,6 +42,8 @@ runs:
             echo "GitHub API error: $(echo "$PAGE_JSON" | jq -r .message)"
             exit 1
           fi
+
+          # If there are no more results
 
           COUNT=$(echo "$PAGE_JSON" | jq length)
           if [[ $COUNT -eq 0 ]]; then
@@ -56,6 +60,8 @@ runs:
 
         DELETE_IDS=()
         TOTAL_DEVELOP=0
+
+        # Iterates over all versions to check if they are tagged with develop
 
         while IFS= read -r version; do
           TAGS=$(echo "$version" | jq -r '.metadata.container.tags[]?')
@@ -86,12 +92,16 @@ runs:
         echo "Total develop images: $TOTAL_DEVELOP"
         echo "Initially marked for deletion: ${#DELETE_IDS[@]}"
 
+        # We should always have five develop images retained
+
         MAX_DELETIONS=$((TOTAL_DEVELOP - 5))
         if (( MAX_DELETIONS <= 0 )); then
           echo "Not enough develop images to delete safely (need to keep at least 5)."
           echo "version_ids=" >> "$GITHUB_OUTPUT"
           exit 0
         fi
+
+        # Truncates the array to keep at least five images
 
         if (( ${#DELETE_IDS[@]} > MAX_DELETIONS )); then
           echo "Trimming deletion list to preserve 5 develop images."
@@ -116,6 +126,7 @@ runs:
 
         IFS=',' read -r -a IDS_ARRAY <<< "$VERSION_IDS"
 
+        # WILL delete images (comment these out when testing)
         for ID in "${IDS_ARRAY[@]}"; do
           echo "Deleting version ID: $ID"
           # curl -X DELETE \
