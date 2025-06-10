@@ -1,0 +1,32 @@
+name: Release Build
+
+description: Releases the build to existing artifacts
+
+inputs:
+  release_name:
+    description: "Release name for the release asset"
+    required: true
+    type: string
+
+  github_ref:
+    description: "Full GitHub reference of the event"
+    required: true
+    type: string
+
+  commit_sha:
+    description: "Full GitHub reference of the event"
+    required: true
+    type: string
+
+runs:
+  using: composite
+  steps:
+    - name: Create release and upload release.tar.gz
+      uses: ncipollo/release-action@v1.16.0
+      with:
+        name: ${{ inputs.release_name }}
+        tag: v${{ inputs.release_name }}
+        prerelease: ${{ !(inputs.github_ref == 'refs/heads/master') }}
+        commit: ${{ inputs.commit_sha }}
+        artifacts: release.tar.gz
+        artifactErrorsFailBuild: true
