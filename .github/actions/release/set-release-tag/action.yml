@@ -34,7 +34,7 @@ runs:
         echo "$BRANCH"
 
         if [[ "$BRANCH" == "develop" ]]; then
-          TAG="${VERSION}-${{ inputs.github_run_id }}-test"
+          TAG="${VERSION}-${{ inputs.github_run_id }}-develop"
         else
           TAG="$VERSION"
         fi
