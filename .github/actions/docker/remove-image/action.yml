@@ -129,8 +129,8 @@ runs:
         # WILL delete images (comment these out when testing)
         for ID in "${IDS_ARRAY[@]}"; do
           echo "Deleting version ID: $ID"
-          # curl -X DELETE \
-          #   -H "Authorization: Bearer ${{ inputs.github_token }}" \
-          #   -H "Accept: application/vnd.github+json" \
-          #   "https://api.github.com/orgs/${ORG}/packages/container/${PACKAGE_NAME_ENCODED}/versions/${ID}"
+          curl -X DELETE \
+            -H "Authorization: Bearer ${{ inputs.github_token }}" \
+            -H "Accept: application/vnd.github+json" \
+            "https://api.github.com/orgs/${ORG}/packages/container/${PACKAGE_NAME_ENCODED}/versions/${ID}"
         done
