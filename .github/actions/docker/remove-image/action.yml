@@ -1,0 +1,136 @@
+name: Remove old/unstable docker images
+
+inputs:
+  repo_name:
+    description: "Name of the repository/package containing Docker images"
+    required: true
+
+  github_token:
+    description: "GitHub App Token with permissions to delete packages"
+    required: true
+
+  cutoff_date:
+    description: "Packages beyond this date will be deleted"
+    required: true
+
+runs:
+  using: "composite"
+  steps:
+    - name: Collect Docker image versions to delete
+      id: collect_versions
+      shell: bash
+      run: |
+        ORG="sanger"
+        PACKAGE_NAME="${{ inputs.repo_name }}/${{ inputs.repo_name }}"
+        PACKAGE_NAME_ENCODED=$(echo -n "$PACKAGE_NAME" | jq -sRr @uri)
+        CUTOFF_DATE=$(date -d "${{ inputs.cutoff_date }}" +%Y-%m-%d)
+
+        VERSIONS_JSON="[]"
+        PAGE=1
+        PER_PAGE=100
+
+        # This will get all versions (has pagination of the API to return ALL results)
+
+        while :; do
+          PAGE_JSON=$(curl -s \
+            -H "Authorization: Bearer ${{ inputs.github_token }}" \
+            -H "Accept: application/vnd.github+json" \
+            "https://api.github.com/orgs/${ORG}/packages/container/${PACKAGE_NAME_ENCODED}/versions?per_page=${PER_PAGE}&page=${PAGE}")
+
+          # Check if API returned an error object instead of array
+          if echo "$PAGE_JSON" | jq -e 'if type=="object" and has("message") then true else false end' >/dev/null; then
+            echo "GitHub API error: $(echo "$PAGE_JSON" | jq -r .message)"
+            exit 1
+          fi
+
+          # If there are no more results
+
+          COUNT=$(echo "$PAGE_JSON" | jq length)
+          if [[ $COUNT -eq 0 ]]; then
+            break
+          fi
+
+          VERSIONS_JSON=$(jq -s '.[0] + .[1]' <(echo "$VERSIONS_JSON") <(echo "$PAGE_JSON"))
+
+          PAGE=$((PAGE + 1))
+        done
+
+        NUM_VERSIONS=$(echo "$VERSIONS_JSON" | jq length)
+        echo "Total image versions found: $NUM_VERSIONS"
+
+        DELETE_IDS=()
+        TOTAL_DEVELOP=0
+
+        # Iterates over all versions to check if they are tagged with develop
+
+        while IFS= read -r version; do
+          TAGS=$(echo "$version" | jq -r '.metadata.container.tags[]?')
+          CREATED_AT=$(echo "$version" | jq -r '.created_at')
+          VERSION_ID=$(echo "$version" | jq -r '.id')
+
+          for TAG in $TAGS; do
+            if [[ "$TAG" == "latest" ]]; then
+              continue
+            fi
+            if [[ "$TAG" != *develop* ]]; then
+              continue
+            fi
+
+            TOTAL_DEVELOP=$((TOTAL_DEVELOP + 1))
+
+            CREATED_AT_EPOCH=$(date -d "$CREATED_AT" +%s)
+            CUTOFF_EPOCH=$(date -d "${CUTOFF_DATE}T00:00:00Z" +%s)
+
+            if (( CREATED_AT_EPOCH < CUTOFF_EPOCH )); then
+              echo "Marked for deletion: $TAG ($VERSION_ID), created at $CREATED_AT"
+              DELETE_IDS+=("$VERSION_ID")
+            fi
+            break
+          done
+        done < <(echo "$VERSIONS_JSON" | jq -c '.[]')
+
+        echo "Total develop images: $TOTAL_DEVELOP"
+        echo "Initially marked for deletion: ${#DELETE_IDS[@]}"
+
+        # We should always have five develop images retained
+
+        MAX_DELETIONS=$((TOTAL_DEVELOP - 5))
+        if (( MAX_DELETIONS <= 0 )); then
+          echo "Not enough develop images to delete safely (need to keep at least 5)."
+          echo "version_ids=" >> "$GITHUB_OUTPUT"
+          exit 0
+        fi
+
+        # Truncates the array to keep at least five images
+
+        if (( ${#DELETE_IDS[@]} > MAX_DELETIONS )); then
+          echo "Trimming deletion list to preserve 5 develop images."
+          DELETE_IDS=("${DELETE_IDS[@]: -$MAX_DELETIONS}")
+        fi
+
+        echo "Final deletions: ${#DELETE_IDS[@]}"
+        echo "version_ids=$(IFS=,; echo "${DELETE_IDS[*]}")" >> "$GITHUB_OUTPUT"
+
+    - name: Delete collected Docker image versions
+      shell: bash
+      run: |
+        ORG="sanger"
+        PACKAGE_NAME="${{ inputs.repo_name }}/${{ inputs.repo_name }}"
+        PACKAGE_NAME_ENCODED=$(echo -n "$PACKAGE_NAME" | jq -sRr @uri)
+        VERSION_IDS="${{ steps.collect_versions.outputs.version_ids }}"
+
+        if [[ -z "$VERSION_IDS" || "$VERSION_IDS" == "null" ]]; then
+          echo "No versions found to delete."
+          exit 0
+        fi
+
+        IFS=',' read -r -a IDS_ARRAY <<< "$VERSION_IDS"
+
+        # WILL delete images (comment these out when testing)
+        for ID in "${IDS_ARRAY[@]}"; do
+          echo "Deleting version ID: $ID"
+          curl -X DELETE \
+            -H "Authorization: Bearer ${{ inputs.github_token }}" \
+            -H "Accept: application/vnd.github+json" \
+            "https://api.github.com/orgs/${ORG}/packages/container/${PACKAGE_NAME_ENCODED}/versions/${ID}"
+        done

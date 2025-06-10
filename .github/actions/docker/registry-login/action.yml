@@ -1,0 +1,23 @@
+name: Login to docker registry
+
+inputs:
+  github_user:
+    description: "Current user in the action environment"
+    required: true
+    type: string
+
+  github_token:
+    description: "Token for the GitHub action"
+    required: true
+    type: string
+
+runs:
+  using: composite
+  steps:
+    - name: Login to registry
+      shell: bash
+      run: >-
+        docker login
+        -u ${{ inputs.github_user }}
+        -p ${{ inputs.github_token }}
+        docker.pkg.github.com
