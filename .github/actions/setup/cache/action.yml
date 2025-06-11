@@ -11,6 +11,11 @@ inputs:
     description: "Fallback cache keys used when an exact match for the primary cache key is not found"
     required: false
 
+# If we don't find the specific cache we want, fallback to the last rubocop
+# cache, then finally any cache for this repo.
+# Github looks for the newest cache beginning with the first entry, before
+# falling back the the second if none is present.
+
 runs:
   using: composite
   steps:
