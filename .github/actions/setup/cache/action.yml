@@ -1,0 +1,22 @@
+name: Cache Setup
+
+inputs:
+  path:
+    description: "Path to cache"
+    required: true
+  key:
+    description: "Key to identify and restore the cache"
+    required: true
+  restore-keys:
+    description: "Fallback cache keys used when an exact match for the primary cache key is not found"
+    required: false
+
+runs:
+  using: composite
+  steps:
+    - name: Cache
+      uses: actions/cache@v4
+      with:
+        path: ${{ env.path }}
+        key: ${{ env.key }}
+        restore-keys: ${{ env.restore-keys }}
