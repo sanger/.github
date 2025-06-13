@@ -15,6 +15,7 @@ runs:
   using: composite
   steps:
     - name: Remove image-bundled Chrome
+      shell: bash
       run: sudo apt-get purge google-chrome-stable
 
     - name: Setup stable Chrome
