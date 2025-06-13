@@ -1,0 +1,45 @@
+name: Update Rubocop
+
+on:
+  workflow_call:
+
+jobs:
+  update_rubocop:
+    if: (github.repository_owner == 'sanger') # On the sanger fork only
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: sanger/.github/.github/actions/setup/checkout@master
+
+      - name: Setup Ruby
+        uses: sanger/.github/.github/actions/setup/ruby@master
+
+      - name: Setup Node
+        uses: sanger/.github/.github/actions/setup/node@master
+
+      - run: yarn install
+
+      - name: Update Rubocop
+        run: |
+          bundle config --local deployment false
+          bundle update --group=linting
+
+      - name: Correcting and ignoring
+        run: bundle exec rubocop --auto-correct --disable-uncorrectable
+
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v7
+        with:
+          title: Automatic Rubocop update
+          branch: gh_action/update_rubocop
+          labels: Technical Debt
+          draft: always-true
+          delete-branch: true
+          body: |
+            Automatic update via https://github.com/sanger/sequencescape/blob/develop/.github/workflows/update_rubocop.yml
+
+            This cop will trigger safe-autocorrect for new cops, and will
+            add inline rubocop:todo for other cops. Please sanity check
+            any changes before merging in.
+
+            Click `Ready for review` to trigger the CI checks.
