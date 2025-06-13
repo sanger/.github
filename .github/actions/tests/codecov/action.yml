@@ -23,8 +23,8 @@ runs:
       - name: Upload coverage reports
         uses: codecov/codecov-action@v5.4.0
         with:
-          name: ${{ github.run_id }}_${{ github.job }}_${{ matrix.ci_node_index }}_${{ github.event_name }}
-          token: ${{ secrets.CODECOV_TOKEN }}
-          disable_search: true
-          files: ${{ github.workspace }}/lcov.info
+          name: ${{ inputs.name }}
+          token: ${{ inputs.token }}
+          disable_search: ${{ inputs.disable_search }}
+          files: ${{ inputs.files }}
           fail_ci_if_error: true
