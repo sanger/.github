@@ -16,9 +16,9 @@ inputs:
 runs:
   using: composite
   steps:
-      - name: Upload artifacts
-        uses: actions/upload-artifact@v4.4.0
-        with:
-          name: ${{ inputs.name }}
-          path: ${{ inputs.path }}
-          retention-days: ${{ inputs.retention-days }}
+    - name: Upload artifacts
+      uses: actions/upload-artifact@v4.4.0
+      with:
+        name: ${{ inputs.name }}
+        path: ${{ inputs.path }}
+        retention-days: ${{ inputs.retention-days }}
