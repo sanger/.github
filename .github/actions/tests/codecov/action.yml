@@ -20,11 +20,11 @@ inputs:
 runs:
   using: composite
   steps:
-      - name: Upload coverage reports
-        uses: codecov/codecov-action@v5.4.0
-        with:
-          name: ${{ inputs.name }}
-          token: ${{ inputs.token }}
-          disable_search: ${{ inputs.disable_search }}
-          files: ${{ inputs.files }}
-          fail_ci_if_error: true
+    - name: Upload coverage reports
+      uses: codecov/codecov-action@v5.4.0
+      with:
+        name: ${{ inputs.name }}
+        token: ${{ inputs.token }}
+        disable_search: ${{ inputs.disable_search }}
+        files: ${{ inputs.files }}
+        fail_ci_if_error: true
