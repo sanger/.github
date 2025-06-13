@@ -1,0 +1,30 @@
+name: Upload coverage reports to Codecov
+
+inputs:
+  name:
+    description: "Name of the report"
+    required: true
+
+  token:
+    description: "Token for upload"
+    required: true
+
+  disable-search:
+    description: "Boolean for disabling search"
+    required: true
+
+  files:
+    description: "Files for coverage"
+    required: true
+
+runs:
+  using: composite
+  steps:
+      - name: Upload coverage reports
+        uses: codecov/codecov-action@v5.4.0
+        with:
+          name: ${{ github.run_id }}_${{ github.job }}_${{ matrix.ci_node_index }}_${{ github.event_name }}
+          token: ${{ secrets.CODECOV_TOKEN }}
+          disable_search: true
+          files: ${{ github.workspace }}/lcov.info
+          fail_ci_if_error: true
