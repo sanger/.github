@@ -1,0 +1,27 @@
+name: Cache Setup
+
+inputs:
+  path:
+    description: "Path to cache"
+    required: true
+  key:
+    description: "Key to identify and restore the cache"
+    required: true
+  restore-keys:
+    description: "Fallback cache keys used when an exact match for the primary cache key is not found"
+    required: false
+
+# If we don't find the specific cache we want, fallback to the last rubocop
+# cache, then finally any cache for this repo.
+# Github looks for the newest cache beginning with the first entry, before
+# falling back the the second if none is present.
+
+runs:
+  using: composite
+  steps:
+    - name: Restore Cache
+      uses: actions/cache@v4
+      with:
+        path: ${{ inputs.path }}
+        key: ${{ inputs.key }}
+        restore-keys: ${{ inputs.restore-keys }}
