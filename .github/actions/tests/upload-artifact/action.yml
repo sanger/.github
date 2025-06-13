@@ -1,0 +1,24 @@
+name: Upload artifact
+
+inputs:
+  name:
+    description: "Name of the artifact"
+    required: true
+
+  path:
+    description: "Path to assets to upload"
+    required: true
+
+  retention-days:
+    description: "Number of days to keep the artifact for"
+    required: true
+
+runs:
+  using: composite
+  steps:
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4.4.0
+        with:
+          name: ${{ inputs.name }}
+          path: ${{ inputs.path }}
+          retention-days: ${{ inputs.retention-days }}
