@@ -1,0 +1,7 @@
+name: Deploy documentation to Github Pages
+
+runs:
+  using: composite
+  steps:
+    - name: Deploy to GitHub Pages
+      uses: actions/deploy-pages@v4
