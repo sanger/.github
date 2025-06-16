@@ -17,9 +17,6 @@ name: Update Rubocop
 
 on:
   workflow_call:
-  push:
-    branches:
-      - y25-099-7-migrate-actions
 
 jobs:
   update_rubocop:
