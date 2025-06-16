@@ -7,9 +7,9 @@ name: Update Rubocop
 # * You update the 'BUNDLE_WITHOUT' section to exclude other groups, especially
 #   those which will block `bundle install`
 #
-# Once added this will add an actions which:
-# * Automatically runs at 10 am Sunday
-# * Can be triggered manually via a workflow_dispatch (See link below)
+# Once added this will add an action which:
+# * Automatically runs when triggered (Reusable workflow)
+# * Can be triggered manually via a workflow_dispatch
 # * Will automatically update all gems in the 'lint' group
 # * Will run new safe autocorrect cops, and will add inline rubocop:todo for
 #   other cops
