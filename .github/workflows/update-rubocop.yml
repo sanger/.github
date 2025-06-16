@@ -17,6 +17,9 @@ name: Update Rubocop
 
 on:
   workflow_call:
+  push:
+    branches:
+      - y25-099-7-migrate-actions
 
 jobs:
   update_rubocop:
@@ -29,10 +32,10 @@ jobs:
       - name: Setup Ruby
         uses: sanger/.github/.github/actions/setup/ruby@master
 
-      - name: Setup Node
-        uses: sanger/.github/.github/actions/setup/node@master
+      # - name: Setup Node
+      #   uses: sanger/.github/.github/actions/setup/node@master
 
-      - run: yarn install
+      # - run: yarn install
 
       - name: Update Rubocop
         run: |
