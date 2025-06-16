@@ -174,8 +174,8 @@ Across our actions, we use GitHub application installation tokens which are gene
 ## ✅ Best Practices
 
 - Keep composite actions **single-purpose** and **small**.
-- Avoid hard-coding values inside workflows by `inputs` and `secrets`.
-- Prefer **clear and descriptive names** for actions and workflows to improve readability and discoverability.
+- Avoid hard-coding values inside workflows by using `inputs` and `secrets`.
+- Use **clear and descriptive names** for actions and workflows to improve readability and discoverability.
 - Document each composite action and reusable workflow with a comment explaining usage, inputs, and examples.
 - Use **consistent naming conventions** (e.g., kebab-case for folder names).
 - Keep **secrets scoped appropriately** (environment or org-level) and declare them explicitly in workflows.
