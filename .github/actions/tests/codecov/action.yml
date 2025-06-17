@@ -14,7 +14,7 @@ inputs:
     required: true
 
   files:
-    description: "Files for coverage"
+    description: "Comma-separated list of explicit files to upload. If specified, set `disable-search` to `true`"
     required: true
 
 runs:
