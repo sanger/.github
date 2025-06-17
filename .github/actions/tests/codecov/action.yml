@@ -12,6 +12,7 @@ inputs:
   disable-search:
     description: "Boolean for disabling search"
     required: false
+    default: false
 
   files:
     description: "Comma-separated list of explicit files to upload. If specified, set `disable-search` to `true`"
