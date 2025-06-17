@@ -2,8 +2,8 @@ name: Setup Google Chrome
 
 inputs:
   chrome-version:
-    description: "Version of chrome to install"
-    required: true
+    description: "Version of chrome to install (if empty, the latest is installed)"
+    required: false
 
   install-chromedriver:
     required: true
