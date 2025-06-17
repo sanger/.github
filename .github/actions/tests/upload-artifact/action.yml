@@ -11,7 +11,8 @@ inputs:
 
   retention-days:
     description: "Number of days to keep the artifact for"
-    required: true
+    required: false
+    defaukt: 5
 
 runs:
   using: composite
