@@ -1,0 +1,26 @@
+name: Setup Google Chrome
+
+inputs:
+  chrome-version:
+    description: "Version of chrome to install (if empty, the latest is installed)"
+    required: false
+
+  install-chromedriver:
+    required: true
+
+  install-dependencies:
+    required: true
+
+runs:
+  using: composite
+  steps:
+    - name: Remove image-bundled Chrome
+      shell: bash
+      run: sudo apt-get purge google-chrome-stable
+
+    - name: Setup stable Chrome
+      uses: browser-actions/setup-chrome@v1
+      with:
+        chrome-version: ${{ inputs.chrome-version }}
+        install-chromedriver: ${{ inputs.install-chromedriver }}
+        install-dependencies: ${{ inputs.install-dependencies }}
