@@ -18,10 +18,14 @@ inputs:
     description: "Comma-separated list of explicit files to upload. If specified, set `disable-search` to `true`"
     required: false
 
-    fail-ci-if-error:
-      description: "If the workflow should fail when the Codecov upload fails"
-      required: false
-      default: true  
+  fail-ci-if-error:
+    description: "If the workflow should fail when the Codecov upload fails"
+    required: false
+    default: true  
+    
+  flags:
+    description: "Set flags as identifiers"
+    required: false
 
 runs:
   using: composite
@@ -31,6 +35,7 @@ runs:
       with:
         name: ${{ inputs.name }}
         token: ${{ inputs.token }}
+        flags: ${{ inputs.flags }}
         disable_search: ${{ inputs.disable_search }}
         files: ${{ inputs.files }}
         fail_ci_if_error: ${{ inputs.fail-ci-if-error }}
