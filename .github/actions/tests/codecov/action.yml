@@ -18,10 +18,10 @@ inputs:
     description: "Comma-separated list of explicit files to upload. If specified, set `disable-search` to `true`"
     required: false
 
-    fail-ci-if-error:
-      description: "If the workflow should fail when the Codecov upload fails"
-      required: false
-      default: true  
+  fail-ci-if-error:
+    description: "If the workflow should fail when the Codecov upload fails"
+    required: false
+    default: true  
     
   flags:
     description: "Set flags as identifiers"
