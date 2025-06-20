@@ -22,6 +22,10 @@ inputs:
       description: "If the workflow should fail when the Codecov upload fails"
       required: false
       default: true  
+    
+  flags:
+    description: "Set flags as identifiers"
+    required: false
 
 runs:
   using: composite
