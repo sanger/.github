@@ -1,0 +1,14 @@
+name: Upload coverage reports to Code Climate
+
+inputs:
+  CC-TEST-REPORTER-ID:
+    description: "ID for the test reporter"
+    required: true
+
+runs:
+  using: composite
+  steps:
+    - name: Upload coverage reports
+      uses: paambaati/codeclimate-action@v5.0.0
+      env:
+        CC_TEST_REPORTER_ID: ${{ inputs.CC-TEST-REPORTER-ID }}
