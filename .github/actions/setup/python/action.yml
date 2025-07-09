@@ -1,0 +1,7 @@
+name: Setup Python
+
+runs:
+  using: composite
+  steps:
+    - name: Setup Python
+      uses: actions/setup-python@v5
