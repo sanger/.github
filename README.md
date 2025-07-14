@@ -159,9 +159,44 @@ You can pass inputs and secrets as required by the reusable workflow. Composite 
 
 ## 🧪 Testing New Actions & Workflows
 
-Incomplete
+When developing or updating a **composite action** or **reusable workflow**, always validate changes before merging.  
 
----
+### 🧩 For Composite Actions
+
+1. **Use a feature branch**  
+   Push your changes to a feature branch in the `.github` repository.
+
+2. **Reference your branch**  
+   In your consuming repository or test workflow, point directly to your feature branch instead of `master`:
+
+   ```yaml
+   uses: sanger/.github/.github/actions/setup/node@your-feature-branch
+   ```
+
+3. **Run the workflow**  
+   Trigger the workflow (e.g., via pull request or push) and verify logs and outputs. This can also be done manually using the `workflow_dispatch` trigger.
+
+### 🔁 For Reusable Workflows
+
+1. **Use a feature branch**  
+    Push your changes to a feature branch in the `.github` repository.
+
+2. **Reference your branch**  
+   In your calling workflow:
+
+    ```yaml
+    jobs:
+      example:
+        uses: sanger/.github/.github/workflows/create-release-pr.yml@your-feature-branch
+    ```
+
+1. **Run and inspect**  
+    Execute the workflow and confirm that all steps complete as expected.
+
+### ✅ Final Steps
+Once confirmed, merge the feature branch into master.
+
+Update documentation if needed.
 
 ## 🔒 Secrets & Permissions
 
