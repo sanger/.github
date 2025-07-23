@@ -1,9 +1,15 @@
 name: Upload artifacts to Github Pages
 
+inputs:
+  path:
+    description: 'Path to the folder containing the documentation'
+    required: false
+    default: 'doc' # Path to the folder containing the Yard documentation (default is 'doc')
+
 runs:
   using: composite
   steps:
     - name: Upload artifact to GitHub Pages
       uses: actions/upload-pages-artifact@v3
       with:
-        path: doc # Path to the folder containing the Yard documentation (default is 'doc')
+        path: ${{ inputs.path }}
