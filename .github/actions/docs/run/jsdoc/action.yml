@@ -1,0 +1,12 @@
+name: Run jsdoc and organize docs
+
+runs:
+  using: composite
+  steps:
+    - name: Run jsdoc and organize documentation
+      run: |
+        npm run jsdoc
+        mkdir -p docs/public
+        cp -r public docs/public
+        cp public/favicon.ico docs/
+        cp -r style_guide.md docs/style_guide.md
