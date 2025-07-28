@@ -1,7 +1,15 @@
 name: Install dependencies with npm
 
+name: Install dependencies with npm
+
+inputs:
+  shell:
+    description: 'Shell to use for running the command'
+    default: bash
+
 runs:
   using: composite
   steps:
     - name: Install dependencies
+      shell: ${{ inputs.shell }}
       run: npm ci --legacy-peer-deps
