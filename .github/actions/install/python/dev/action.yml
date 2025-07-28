@@ -1,0 +1,7 @@
+name: Install Python dependencies
+
+runs:
+  using: composite
+  steps:
+    - name:  Install Python development dependencies only
+      run: pip install -r requirements-dev.txt
