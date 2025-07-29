@@ -4,6 +4,7 @@ inputs:
   shell:
     description: 'Shell to use for running the command'
     default: bash
+    required: false
 
 runs:
   using: composite
