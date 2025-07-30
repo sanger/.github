@@ -1,7 +1,13 @@
 name: Install Python dependencies
 
+inputs:
+  shell:
+    description: 'Shell to use for running the command'
+    default: bash
+
 runs:
   using: composite
   steps:
     - name:  Install Python development dependencies only
+      shell: ${{ inputs.shell }}
       run: pip install -r requirements-dev.txt

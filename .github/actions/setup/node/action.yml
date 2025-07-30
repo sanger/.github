@@ -7,6 +7,10 @@ inputs:
     description: "Path to .nvmrc or node version file"
     required: false
     default: ".nvmrc"
+  cache:
+    description: "Dependency manager to cache (npm, yarn, pnpm)"
+    required: false
+    default: "npm"
 
 runs:
   using: composite
@@ -15,4 +19,4 @@ runs:
       uses: actions/setup-node@v4
       with:
         node-version-file: ${{ inputs.node-version-file }}
-        cache: yarn
+        cache: ${{ inputs.cache }}
