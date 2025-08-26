@@ -1,4 +1,5 @@
 # Create or update merge-to-main pull requests for production releases
+# PRs are created from develop into main (or master) as a draft and tagged with a 'production release' label
 # Note that by design, creating or editing a PR will not trigger a downstream `pull_request` event as this could lead to recursion
 name: Release
 on:
@@ -10,6 +11,17 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+
+      - name: Create 'production release' label if it doesn't exist
+        env:
+          GH_TOKEN: ${{ github.token }} # required for gh cli
+        run: |
+          if ! gh label view "production release" >/dev/null 2>&1; then
+            gh label create "production release" -c "#08872B" -d "Pull requests for production release"
+            echo "Created 'production release' label"
+          else
+            echo "'production release' label already exists"
+          fi
 
       - name: Determine main branch name
         run: |
@@ -110,7 +122,7 @@ jobs:
           if [ -z "$EXISTING_PR" ]; then
             # Create a new PR
             PR_BODY="$DESCRIPTION"
-            gh pr create --base "$MAIN_BRANCH_NAME" --head develop --title "$PR_TITLE" --body "$PR_BODY" --draft
+            gh pr create --base "$MAIN_BRANCH_NAME" --head develop --title "$PR_TITLE" --body "$PR_BODY" --draft --label "production release"
           else
             # get the body of the existing PR
             EXISTING_PR_BODY=$(gh pr view "$EXISTING_PR" --json body --jq '.body')
