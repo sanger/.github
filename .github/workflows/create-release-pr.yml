@@ -12,17 +12,12 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Create 'production release' label if it doesn't exist
+      - name: Create 'production release' label
         env:
           GH_TOKEN: ${{ github.token }} # required for gh cli
         run: |
-          # Check if the label exists, and create it if it doesn't
-          if ! gh label list --json name | grep -q "production release"; then
-            gh label create "production release" --description "Pull requests for production release" --color "#0e8a16"
-            echo "Created 'production release' label"
-          else
-            echo "Label 'production release' already exists"
-          fi
+          gh label create "production release" --description "Pull requests for production release" --color "#0e8a16" --force
+          echo "Created 'production release' label"
 
       - name: Determine main branch name
         run: |
