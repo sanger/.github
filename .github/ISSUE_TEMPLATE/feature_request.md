@@ -19,6 +19,8 @@ e.g. John S (don't include surnames in public repos)
 
 Consider does this need _User_ testing or can it be done within the team. For guidance see Confluence page "Process for deciding on what user stories need UAT (User Acceptance Testing)".
 
+If this is a complex feature crossing teams or applications, consider supporting the UAT more fully by reviewing users' test cases or acting as a coordinator.
+
 e.g. John S (don't include surnames in public repos)
 
 **Acceptance criteria**
