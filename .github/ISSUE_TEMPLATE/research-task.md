@@ -7,6 +7,8 @@ assignees: ''
 
 ---
 
+Reminder: As a team, we prefer to pair on research tasks.
+
 **Description**
 A brief description of the research to be carried out.
 
