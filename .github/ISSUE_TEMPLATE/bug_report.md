@@ -10,7 +10,7 @@ assignees: ''
 **Describe the bug**
 A clear and concise description of what the bug is.
 
-**RT Ticket Number**
+**FreshSerivce/RT Ticket Number**
 If applicable
 
 **To Reproduce**
