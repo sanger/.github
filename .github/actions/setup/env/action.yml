@@ -23,7 +23,7 @@ runs:
         DBPORT: ${{ inputs.dbport }}
       run: |
         bundle config path vendor/bundle
-        bin/setup
+        bin/setup --skip-server
 
         if [ "${{ inputs.precompile }}" = "true" ]; then
           echo "Precompiling assets..."
