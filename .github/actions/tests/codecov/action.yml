@@ -31,7 +31,7 @@ runs:
   using: composite
   steps:
     - name: Upload coverage reports
-      uses: codecov/codecov-action@v5.4.0
+      uses: codecov/codecov-action@v5.5.5
       with:
         name: ${{ inputs.name }}
         token: ${{ inputs.token }}
