@@ -19,7 +19,7 @@ runs:
       run: sudo apt-get purge google-chrome-stable
 
     - name: Setup stable Chrome
-      uses: browser-actions/setup-chrome@v1
+      uses: browser-actions/setup-chrome@v2
       with:
         chrome-version: ${{ inputs.chrome-version }}
         install-chromedriver: ${{ inputs.install-chromedriver }}
