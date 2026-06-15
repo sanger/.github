@@ -9,7 +9,7 @@ jobs:
     # only run when PR is not draft to allow compatability with automated release PR creation
     if: ${{ !github.event.pull_request.draft }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: sanger/.github/.github/actions/setup/checkout@master
         with:
           ref: ${{ github.head_ref }}
       - name: Check if .release-version file has changed
