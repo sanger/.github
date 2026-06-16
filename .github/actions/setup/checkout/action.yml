@@ -4,6 +4,9 @@ inputs:
   token:
     description: "GitHub token for authentication"
     required: false
+  ref:
+    description: "Branch, tag, or SHA to checkout"
+    required: false
 outputs:
   ref:
     description: "The branch or tag ref that was checked out"
@@ -15,3 +18,4 @@ runs:
       uses: actions/checkout@v6
       with:
         token: ${{ inputs.token || github.token }}
+        ref: ${{ inputs.ref }}
