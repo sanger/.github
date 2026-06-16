@@ -1,5 +1,17 @@
 name: "Checkout Repository"
+description: "Checkout repository with optional GitHub token for authentication"
+inputs:
+  token:
+    description: "GitHub token for authentication"
+    required: false
+outputs:
+  ref:
+    description: "The branch or tag ref that was checked out"
+    value: ${{ steps.checkout.outputs.ref }}
 runs:
   using: "composite"
   steps:
-    - uses: actions/checkout@v6
+    - id: checkout
+      uses: actions/checkout@v6
+      with:
+        token: ${{ inputs.token || github.token }}
