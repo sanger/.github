@@ -21,11 +21,6 @@ jobs:
           client-id: ${{ secrets.app_id }}
           private-key: ${{ secrets.app_key }}
 
-      - name: Checkout this repository
-        uses: sanger/.github/.github/actions/setup/checkout@master
-        with:
-          token: ${{ steps.get_workflow_token.outputs.token }}
-
       - name: Set issue prefix # Current year // Y24, Y25 etc
         run: echo "ISSUE_PREFIX=Y$(date +'%y')" >> $GITHUB_ENV
 
