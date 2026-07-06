@@ -36,6 +36,6 @@ runs:
         name: ${{ inputs.name }}
         token: ${{ inputs.token }}
         flags: ${{ inputs.flags }}
-        disable_search: ${{ inputs.disable_search }}
+        disable_search: ${{ inputs.disable-search }}
         files: ${{ inputs.files }}
         fail_ci_if_error: ${{ inputs.fail-ci-if-error }}
