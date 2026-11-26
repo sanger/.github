@@ -14,6 +14,12 @@ inputs:
 runs:
   using: composite
   steps:
+    - name: Remove image-bundled Chromium
+      shell: bash
+      run: |
+        sudo rm -rf /usr/bin/chromium /usr/bin/chromium-browser \
+          /usr/local/share/chromium
+
     - name: Remove image-bundled Chrome
       shell: bash
       run: sudo apt-get purge google-chrome-stable
